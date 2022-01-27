@@ -7,7 +7,9 @@ public class ArraysDriver {
 
 
     public static void main(String[] args) {
-        DivideArr.divide();
+        //DivideArr.divide();
+        int[] arr = new int[] {1,2,3,4,5,6};
+        ArraysTasks.reverseArray(arr);
 
 
 
