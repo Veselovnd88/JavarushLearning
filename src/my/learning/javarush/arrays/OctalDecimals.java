@@ -1,6 +1,5 @@
 package my.learning.javarush.arrays;
 
-import java.text.DecimalFormat;
 
 public class OctalDecimals {
 
@@ -33,13 +32,16 @@ public class OctalDecimals {
     }
 
     public static String toBinary(int decimalNumber) {
+        StringBuilder sb = new StringBuilder();
+
         if (decimalNumber<=0){
          return "";}
-        String binary = "";
+        //String binary = "";
+
         while (decimalNumber!=0){
-            binary=decimalNumber%2+binary;
+            sb.append(decimalNumber % 2);
             decimalNumber/=2;
-        } return binary;
+        } return sb.toString();
 
     }
 
