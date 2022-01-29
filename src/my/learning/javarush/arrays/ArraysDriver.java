@@ -7,9 +7,8 @@ public class ArraysDriver {
 
 
     public static void main(String[] args) {
-        //DivideArr.divide();
-        int[] arr = new int[] {1,2,3,4,5,6};
-        ArraysTasks.reverseArray(arr);
+        System.out.println( OctalDecimals.toOctal(9));
+        System.out.println(OctalDecimals.toDecimal("111"));
 
 
 
