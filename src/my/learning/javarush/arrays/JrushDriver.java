@@ -1,41 +1,37 @@
 package my.learning.javarush.arrays;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class JrushDriver {
 
+    public static int[] numbers = new int[] {56, 45, 89, 1, 45, 13, 4, 69, 11, -89};
+
     public static void main(String[] args) {
-        divide(1, 0);
-        divide(-1, 0);
-        divide(0, 0);
-        divide(100, 20);
-        divide(200, 20);
+        print();
+        sort();
+        System.out.println("\nОтсортированные числа в натуральном порядке:");
+        print();
     }
 
-    public static void divide(double a, double b) {
-        if((a>0&&b==0)||
-                (a==Double.POSITIVE_INFINITY && b>=0&&
-                        b!=Double.POSITIVE_INFINITY)||
-                (a==Double.NEGATIVE_INFINITY &&b<0 &&b!= Double.NEGATIVE_INFINITY)){
-            System.out.println(Double.POSITIVE_INFINITY);
-        }
-        else if((a<0&&b==0)||
-                (a==Double.NEGATIVE_INFINITY && b>=0&&
-                        b!=Double.POSITIVE_INFINITY)||
-                (a==Double.POSITIVE_INFINITY &&b<0 &&b!= Double.NEGATIVE_INFINITY)){
-            System.out.println(Double.NEGATIVE_INFINITY);
-        }
-        else if((a==0&&b==0)||
-                (a==Double.NaN|| b==Double.NaN)||
-                (a==Double.POSITIVE_INFINITY&&b==Double.POSITIVE_INFINITY)||
-                (a==Double.POSITIVE_INFINITY && b== Double.NEGATIVE_INFINITY)||
-                (a==Double.NEGATIVE_INFINITY && b==Double.POSITIVE_INFINITY)||
-                (a==Double.NEGATIVE_INFINITY &&b==Double.NEGATIVE_INFINITY)){
-            System.out.println(Double.NaN);
-        } else {
-            System.out.println (a/b);
+    public static void sort() {
+        for (int i = 0; i < numbers.length - 1; i++) {
+            for (int j = 0; j < numbers.length - i - 1; j++) {
+                if (numbers[j] > numbers[j + 1]) {
+                    int temp = numbers[j];
+                    numbers[j] = numbers[j+1];
+                    numbers[j+1] = temp;
+
+                }
+            }
         }
     }
 
+    public static void print() {
+        for (int number : numbers) {
+            System.out.print(number + "\t");
+        }
+    }
 }
+
