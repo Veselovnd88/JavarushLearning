@@ -9,7 +9,7 @@ public class JrushDriver {
 
 
     public static void main(String[] args) {
-    PlayIO.ex3();
+    PlayIO.ex4();
     }
 
 }

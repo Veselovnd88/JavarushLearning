@@ -48,14 +48,30 @@ public class PlayIO {
         String src = sc.nextLine();
         List<String> my = Files.readAllLines(Paths.get(src));
         my.forEach(str->{
-            str.replace(";","");
-            System.out.println(str);}
-                );
-
+            char[] chars = str.toCharArray();
+            for(char c: chars){
+                if( c!=','&&c!=' '&&c!='.'){
+                    System.out.print(c);
+                }
+            }System.out.println();
+            });
         }
         catch(IOException e){
             e.printStackTrace();
             }
 
+    }
+    public static void ex4(){
+        try(Scanner sc = new Scanner(System.in)){
+            String src = sc.nextLine();
+            List<String> my = Files.readAllLines(Path.of(src));
+            for (int i = 0; i < my.size(); i+=2) {
+                System.out.println(my.get(i));
+
+            }
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
