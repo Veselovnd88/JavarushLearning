@@ -74,4 +74,22 @@ public class PlayIO {
             e.printStackTrace();
         }
     }
+    public static void ex5(){
+        try (InputStream stream = System.in;//открывается поток который читает консоль
+             ) {
+            InputStreamReader in = new InputStreamReader(stream);//чтение консоли
+            BufferedReader buffer = new BufferedReader(in);// чтение в буфер
+            String line = buffer.readLine();
+            char[] chars = line.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                if (i % 2 == 1) {
+                    System.out.print(String.valueOf(chars[i]).toUpperCase());
+                } else {
+                    System.out.print(String.valueOf(chars[i]).toLowerCase());
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Something went wrong : " + e);
+        }
+    }
 }
