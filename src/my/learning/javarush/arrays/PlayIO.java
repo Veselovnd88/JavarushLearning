@@ -92,4 +92,11 @@ public class PlayIO {
             System.out.println("Something went wrong : " + e);
         }
     }
+    public static void ex6(){
+        InputStream stream = System.in;
+        Scanner sc = new Scanner(stream);
+        String str = sc.nextLine();
+
+        System.out.println(Path.of(str).getRoot());
+    }
 }
