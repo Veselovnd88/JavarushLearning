@@ -1,6 +1,7 @@
 package my.learning.javarush.arrays;
 
 import java.io.*;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PlayIO {
+    private static final String THIS_IS_FILE = " - это файл";
+    private static final String THIS_IS_DIR = " - это директория";
 
     public  static  void example(){
         String src ="/home/nikolay/IdeaProjects/JavarushLearning/src/my/learning/javarush/arrays/log.txt";
@@ -98,5 +101,63 @@ public class PlayIO {
         String str = sc.nextLine();
 
         System.out.println(Path.of(str).getRoot());
+    }
+    public static  void ex7(){
+        Scanner sc = new Scanner(System.in);
+        String str = sc.nextLine();
+        while(Files.exists(Path.of(str))){
+            if(Files.isDirectory(Path.of(str))){
+                System.out.println(str+THIS_IS_DIR);
+            }else if(Files.isRegularFile(Path.of(str))){
+                System.out.println(str+THIS_IS_FILE);
+            }str = sc.nextLine();
+        }
+    }
+    public static void ex8(){
+        Scanner scanner = new Scanner(System.in);
+        Path filePath = Path.of(scanner.nextLine());
+        Path fileNewPath = Path.of(scanner.nextLine());
+        try{
+        if(Files.notExists(filePath)){
+            Files.createFile(filePath);
+        }
+        if(Files.exists(fileNewPath)){
+            Files.delete(filePath);
+        } else{
+        Files.move(filePath,fileNewPath);}
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+    public static void ex9(){
+        Scanner scanner = new Scanner(System.in);
+        Path directory = Path.of(scanner.nextLine());
+        try(DirectoryStream<Path> stream = Files.newDirectoryStream(directory)){
+            for(Path path: stream){
+                if(Files.isRegularFile(path)){
+                    System.out.println(path+THIS_IS_FILE);
+                }if(Files.isDirectory(path)){
+                    System.out.println(path+THIS_IS_DIR);
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public static void ex10(){
+        Scanner scanner = new Scanner(System.in);
+        Path sourceDirectory = Path.of(scanner.nextLine());
+        Path targetDirectory = Path.of(scanner.nextLine());
+        try(DirectoryStream<Path> stream = Files.newDirectoryStream(sourceDirectory)){
+            for(Path path:stream){
+                if(Files.isRegularFile(path)){
+                    Path resolve = targetDirectory.resolve(path.getFileName());
+                    Files.copy(path,resolve);
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
