@@ -2,6 +2,7 @@ package my.learning.javarush.arrays;
 
 import java.io.*;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -189,4 +190,46 @@ public class PlayIO {
 
 
     }
+    public static void ex13(){
+        String image = "https://www.google.ru/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png";
+        String dest = "C:\\Users\\Nikolay\\IdeaProjects\\JavarushLearning\\src\\my\\learning\\javarush\\arrays\\im.png";
+        try{
+        URL url = new URL(image);
+        InputStream input = url.openStream();
+        Files.copy(input, Path.of(dest));}
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+    public static void ex14(){
+        try{URL url = new URL("https://javarush.ru/api/1.0/rest/projects");
+        InputStream input = url.openStream();
+        byte[] buffer = input.readAllBytes();
+        String str = new String(buffer);
+        System.out.println(str);}
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static void ex15(){
+      try {
+          URL url = new URL("http://httpbin.org/post");//создан экземпляр с ссылкой
+          URLConnection conn = url.openConnection(); // открыто соединение
+          conn.setDoOutput(true); // разрешили отправлять
+          OutputStream out = conn.getOutputStream(); // получили поток на отправку
+
+          PrintStream send = new PrintStream(out); // поток для отправки сообщений
+          send.println("Hello");
+          InputStream in = conn.getInputStream(); // входящий поток
+          BufferedReader buffer = new BufferedReader(new InputStreamReader(in));
+          while(buffer.ready()){
+              System.out.println(buffer.readLine());
+          }
+      } catch (Exception e){
+          e.printStackTrace();
+        }
+
+    }
+
 }
