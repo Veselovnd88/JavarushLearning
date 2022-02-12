@@ -1,6 +1,7 @@
 package my.learning.javarush.arrays;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -159,5 +160,33 @@ public class PlayIO {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+    public static void ex11(){
+        Scanner scanner = new Scanner(System.in);
+        Path sourceDirectory = Path.of(scanner.nextLine());
+        Path targetDirectory = Path.of(scanner.nextLine());
+        try(DirectoryStream<Path> stream = Files.newDirectoryStream(sourceDirectory)){
+            for(Path path:stream){
+            if(Files.isRegularFile(path)){
+                Path resolved= targetDirectory.resolve(path.getFileName());
+                Files.move(path, resolved);
+            }}
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public static void ex12(){
+        try{ URL url = new URL("https://javarush.ru");
+        InputStream input = url.openStream();
+        byte[] buffer = input.readAllBytes();
+        Path file = Files.createTempFile(null,null);
+        Files.write(file,buffer);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
     }
 }
