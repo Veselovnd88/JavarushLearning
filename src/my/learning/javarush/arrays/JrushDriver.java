@@ -1,22 +1,20 @@
 package my.learning.javarush.arrays;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import org.w3c.dom.ls.LSOutput;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class JrushDriver {
-
-
     public static void main(String[] args) {
-        Date date = new Date("6 January 2010");
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        System.out.println(formatter.format(date));
+
+        LocalDate today =  LocalDate.of(2021,3,22);
+        LocalDate day = LocalDate.ofEpochDay(18517);
+        System.out.println(day);
     }
+
+
 
 }
 
