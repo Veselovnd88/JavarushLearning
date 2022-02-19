@@ -1,20 +1,21 @@
 package my.learning.javarush.arrays;
 
 
-import org.w3c.dom.ls.LSOutput;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
+import java.util.*;
 
 public class JrushDriver {
-    public static void main(String[] args) {
 
-        LocalDate today =  LocalDate.of(2021,3,22);
-        LocalDate day = LocalDate.ofEpochDay(18517);
-        System.out.println(day);
+    public static void main(String[] args) {
+        ZoneId zone1 = ZoneId.of("Zulu");
+        ZoneId zone2 = ZoneId.of("Etc/GMT+8");
+        System.out.println(ZonedDateTime.now(zone1));
+        System.out.println(ZonedDateTime.now(zone2));
+
+        LocalDateTime time = PlayDate.changeZone(LocalDateTime.of(2020, 3, 19, 1, 40), zone1, zone2);
+        System.out.println(time);
     }
 
 
-
-}
+    }
 
