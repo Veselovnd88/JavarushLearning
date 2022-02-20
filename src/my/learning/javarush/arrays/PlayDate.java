@@ -1,6 +1,7 @@
 package my.learning.javarush.arrays;
 
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 
@@ -118,6 +119,20 @@ public class PlayDate {
     static LocalDateTime changeZone(LocalDateTime fromDateTime, ZoneId fromZone, ZoneId toZone) {
     ZonedDateTime time  = ZonedDateTime.of(fromDateTime, fromZone);
         return time.withZoneSameInstant(toZone).toLocalDateTime();
+    }
+
+    public static String example(LocalDateTime dt){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyyг. Hч.mmмин");
+        return dtf.format(dt);
+    }
+    public static void example2(ZonedDateTime time){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("e d.M.yy HH:mm:ss.n \nVV");
+        System.out.println(dtf.format(time));
+    }
+    public static void example3(String str){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss d/M/yyyy");
+        System.out.println(LocalDateTime.parse(str, dateTimeFormatter));
+
     }
 
     static void printCollection(Collection<?> collection) {
