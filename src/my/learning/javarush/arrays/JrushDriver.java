@@ -10,11 +10,12 @@ import java.time.Month;
 public class JrushDriver {
 
     public static void main(String[] args) {
-      ArrayList<String> list = new ArrayList<>();
-      Collections.addAll(list,"Hate", "World","Disaster");
-      Stream<String> s = list.stream();
-      List<String> l = s.filter(x->(x.length()<5)).collect(Collectors.toList());
-      l.forEach(System.out::println);
+        int[] data = new int[]{1, 2, 3, 5, -2, -8, 0, 77, 5, 5};
+        int x = Arrays.stream(data).min().getAsInt();
+        for (int i = 0; i < data.length ; i++) {
+
+        }
+        System.out.println(x);
     }
 
 
