@@ -231,5 +231,43 @@ public class PlayIO {
         }
 
     }
+    public  static  void ex16(){
+        try (Scanner sc = new Scanner(System.in);
+             FileInputStream fis = new FileInputStream(sc.nextLine());
+             InputStreamReader isr = new InputStreamReader(fis);
+             BufferedReader br = new BufferedReader(isr);
+        ){
+            String line;
+            while ((line = br.readLine())!=null){
+                System.out.println(line);
+            }
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public static  void ex17(){
+        try ( BufferedReader br = new BufferedReader(new InputStreamReader(System.in))
+        ){String file = br.readLine();
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+            StringBuilder sb = new StringBuilder();
+            String s = "";
+            while (s.equals("exit")){
+                s = br.readLine();
+                sb.append(s);
+            }
+            bw.write(sb.toString());
+            bw.close();
+
+
+
+        }
+
+
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 
 }
