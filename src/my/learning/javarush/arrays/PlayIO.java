@@ -269,5 +269,42 @@ public class PlayIO {
             e.printStackTrace();
         }
     }
+    public static void ex18() {
+    Scanner sc = new Scanner(System.in);
+    try {
+    List<String> l  = Files.readAllLines(Paths.get(sc.nextLine()));
+        for (String s:l
+             ) {
+            System.out.println(s);
+
+        }}
+    catch (IOException e){
+        e.printStackTrace();
+    }
+    sc.close();
+
+
+    }
+    public static void ex19(){
+        try(Scanner sc = new Scanner(System.in);
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(sc.nextLine())))
+        ){
+            List<Integer> l = new ArrayList<>();
+            String line;
+            while ((line = br.readLine())!=null){
+                l.add(Integer.parseInt(line));
+            }
+            l.stream().sorted().filter(x-> x%2==0).forEach(System.out::println);
+
+
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+}
 
 }
