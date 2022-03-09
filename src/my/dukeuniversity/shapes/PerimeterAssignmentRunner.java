@@ -31,28 +31,65 @@ public class PerimeterAssignmentRunner {
     }
 
     public double getAverageLength(Shape s) {
-        // Put code here
-        return 0.0;
+        double d = getPerimeter(s)/getNumPoints(s);
+        return d;
     }
 
     public double getLargestSide(Shape s) {
-        // Put code here
-        return 0.0;
+        double result = 0;
+        Point prevPt = s.getLastPoint();
+        // For each point currPt in the shape,
+        for (Point currPt : s.getPoints()) {
+            // Find distance from prevPt point to currPt
+            double currDist = prevPt.distance(currPt);
+            // Update totalPerim by currDist
+            if (currDist>result){
+                result = currDist;
+            }
+            // Update prevPt to be currPt
+            prevPt = currPt;
+        }
+        return result;
     }
 
     public double getLargestX(Shape s) {
-        // Put code here
-        return 0.0;
+        double x = 0;
+        for (Point currPt : s.getPoints()) {
+            if (currPt.getX()>x){
+                x = currPt.getX();
+            }
+        }
+        return x;
     }
 
     public double getLargestPerimeterMultipleFiles() {
-        // Put code here
-        return 0.0;
+        DirectoryResource dr = new DirectoryResource();
+        double lp = 0;
+        for (File f : dr.selectedFiles()) {
+            FileResource fr = new FileResource(f);
+            Shape s = new Shape(fr);
+            if (getPerimeter(s)>lp){
+                lp = getPerimeter(s);
+            }
+        }
+        return lp;
     }
 
     public String getFileWithLargestPerimeter() {
-        // Put code here
         File temp = null;    // replace this code
+        DirectoryResource dr = new DirectoryResource();
+        double lp = 0;
+        for (File f : dr.selectedFiles()) {
+            FileResource fr = new FileResource(f);
+            Shape s = new Shape(fr);
+            if (getPerimeter(s)>lp){
+                lp = getPerimeter(s);
+                temp = f;
+            }
+        }
+
+
+
         return temp.getName();
     }
 
@@ -61,15 +98,20 @@ public class PerimeterAssignmentRunner {
         Shape s = new Shape(fr);
         double length = getPerimeter(s);
         System.out.println("perimeter = " + length);
-        System.out.println(getNumPoints(s));
+        //System.out.println(getNumPoints(s));
+        //System.out.println(getAverageLength(s));
+        //System.out.println(getLargestSide(s));
+        //System.out.println(getLargestX(s));
+        //System.out.println(getLargestPerimeterMultipleFiles());
+
     }
     
     public void testPerimeterMultipleFiles() {
-        // Put code here
+        System.out.println(getLargestPerimeterMultipleFiles());
     }
 
     public void testFileWithLargestPerimeter() {
-        // Put code here
+        System.out.println(getFileWithLargestPerimeter());
     }
 
     // This method creates a triangle that you can use to test your other methods
@@ -95,7 +137,9 @@ public class PerimeterAssignmentRunner {
 
     public static void main (String[] args) {
         PerimeterAssignmentRunner pr = new PerimeterAssignmentRunner();
-        pr.testPerimeter();
+        //pr.testPerimeter();
+        //pr.testPerimeterMultipleFiles();
+        pr.testFileWithLargestPerimeter();
 
     }
 }
