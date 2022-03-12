@@ -70,14 +70,14 @@ public class KlubokTask {
         @Override
         public void run(){
             while(!isInterrupted()){
-                try {
+         /*       try {
                     System.out.println(Thread.currentThread().getName());
                     Thread.sleep(1000);
                 } catch (InterruptedException e){
                     System.out.println("stopped");
                     break;
 
-                }
+                }*/
             }
         }
     }

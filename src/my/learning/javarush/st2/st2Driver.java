@@ -7,6 +7,6 @@ public class st2Driver {
 
     public static void main(String[] args) throws Exception {
 
-        KlubokTask.task();
+        RecursiveThread.task();
 }}
 
