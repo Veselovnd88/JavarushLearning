@@ -27,10 +27,8 @@ public class InitOrderTask {
         System.out.println("static void init()");
     }
 
-    public static void main(String[] args) {
-        System.out.println("public static void main");
-        InitOrderTask s = new InitOrderTask();
-    }
+
+
 
     public static void printAllFields(InitOrderTask obj) {
         System.out.println("static void printAllFields");
