@@ -21,7 +21,7 @@ public class TransactionTask {
         try{
         BufferedReader br2 = new BufferedReader(new FileReader(file1));
         BufferedReader br3 = new BufferedReader(new FileReader(file2));
-        String line;
+        String line=null;
         while(!((line=br2.readLine()) ==null)){
             allLines.add(line);
         }
@@ -37,9 +37,22 @@ public class TransactionTask {
         catch (IOException e){
             e.printStackTrace();
         }
+        try{
+        TransactionTask tsk = new TransactionTask();
+        allLines.forEach(System.out::println);
+        tsk.joinData();}
+        catch (CorruptedDataException e){
+            e.printStackTrace();}
+        allLines.forEach(System.out::println);
     }
 
     public void joinData() throws CorruptedDataException {
+        if(allLines.containsAll(forRemoveLines)){
+            allLines.removeAll(forRemoveLines);
+            }
+        else {allLines.clear();
+        throw new CorruptedDataException();}
+        }
 
     }
-}
+
