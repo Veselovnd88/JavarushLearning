@@ -29,7 +29,6 @@ public class PerimeterRunner {
     }
 
     public static void main (String[] args) {
-        PerimeterRunner pr = new PerimeterRunner();
-        pr.testPerimeter();
+        Part1.testFindStopCodon();
     }
 }
