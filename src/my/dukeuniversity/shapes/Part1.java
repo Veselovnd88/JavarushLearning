@@ -14,6 +14,19 @@ public class Part1 {
                             }}
         return dna.length();
      }
+     public static String findGene(String dna){
+        int startIndex = dna.indexOf("atg",0);
+        if(startIndex==-1){
+            return "";
+        }
+        else{
+            int indextaa = findStopCodon(dna,startIndex,"taa");
+            int indextag = findStopCodon(dna,startIndex,"tag");
+            int indextga = findStopCodon(dna,startIndex,"tga");
+        }
+
+
+     }
     public static void testFindStopCodon(){
         String a = "cccatggggtttaaataataataggagagagagagagagttt";
         String ap = "atggggtttaaataataatag";
@@ -21,7 +34,7 @@ public class Part1 {
         //String ap = "";
         //String a = "ATGCCCTAG";
         //String ap = "ATGCCCTAG";
-        System.out.println(findStopCodon(ap,0,"taa"));
+        System.out.println(findStopCodon(a,0,"taa"));
         //System.out.println(ap.length());
 
     }
