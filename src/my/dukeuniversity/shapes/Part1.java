@@ -16,9 +16,9 @@ public class Part1 {
                             }}
         return dna.length();
      }
-     public static String findGene(String dna){
+     public static String findGene(String dna, int start){
         int closest = 0;
-        int startIndex = dna.indexOf("atg",0);
+        int startIndex = dna.indexOf("atg",start);
         if(startIndex==-1){
             return "";
         }
@@ -34,17 +34,24 @@ public class Part1 {
             else {return "";}
      }
      public static void printAllGenes(String dna){
-        String gene = findGene(dna);
+
         int curr = 0;
-        while (!gene.equals("")){
-            System.out.println(gene);
-            //System.out.println(dna.length());
+        while (true){
+            String gene = findGene(dna,curr);
 
-            //System.out.println(ind);
-            gene = findGene(dna.substring(curr));
-
+          if(gene.isEmpty()){
+              break;
+          } System.out.println(gene);
+            curr = dna.indexOf(gene, curr)+ gene.length();
         }
-
+         String dna1 = "CTGCCTGCATGATCGTA";
+         int pos = dna1.indexOf("TG");
+         int count = 0;
+         while (pos >= 0) {
+             count = count + 1;
+             pos = dna1.indexOf("TG",pos+1);
+         }
+         System.out.println(count);
      }
     public static void testFindStopCodon(){
         String a = "cccatggggtttaaataataataggagagagagagagagttt";
@@ -58,14 +65,35 @@ public class Part1 {
 
     }
     public static void testFindGene(){
-        String a = "cccatggggtttaaataataataggagagagagagagagtttatgtaaatgtaa";
+        String a = "AATGCTAACTAGCTGACTAAT".toLowerCase();
         String ap = "atgtgagggtttaaatayyyatayyyatag";
         //String a = "atgcctag";
         //String ap = "";
         //String a = "ATGCCCTAG".toLowerCase();
         //String ap = "ATGCCCTAG".toLowerCase();
         printAllGenes(a);
-        //printAllGenes(ap);
+        printAllGenes(ap);
+    }
+    public static void findAbc(String input) {
+        int index = input.indexOf("abc");
+        while (true) {
+            if (index == -1 || index >= input.length() - 3) {
+                break;
+            }
+            String found = input.substring(index+1, index+4);
+
+            System.out.println(found);
+            System.out.println(index);
+            index = input.indexOf("abc", index+3);
+            System.out.println("index after updating " + index);
+           // if (index > input.length() - 3){
+              //  break;
+           // }
+
+        }
+    }
+    public static void test() {
+        findAbc("abcabcabcabca");
     }
 
 }

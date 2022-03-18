@@ -29,6 +29,6 @@ public class PerimeterRunner {
     }
 
     public static void main (String[] args) {
-        Part1.testFindGene();
+        Part1.test();
     }
 }
