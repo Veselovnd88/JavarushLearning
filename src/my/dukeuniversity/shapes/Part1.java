@@ -1,5 +1,7 @@
 package my.dukeuniversity.shapes;
 
+import edu.duke.StorageResource;
+
 import java.util.Locale;
 
 public class Part1 {
@@ -91,6 +93,20 @@ public class Part1 {
            // }
 
         }
+    }
+
+    public static StorageResource getAllGenes(String dna){
+        StorageResource geneList = new StorageResource();
+        int curr = 0;
+        while (true){
+            String gene = findGene(dna,curr);
+
+            if(gene.isEmpty()){
+                break;
+            } System.out.println(gene);
+            curr = dna.indexOf(gene, curr)+ gene.length();
+        }
+
     }
     public static void test() {
         findAbc("abcabcabcabca");
