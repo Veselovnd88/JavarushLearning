@@ -37,7 +37,8 @@ public class Part1 {
             else {return "";}
      }
      public static void printAllGenes(String dna){
-
+        dna = dna.toLowerCase();
+        int count = 0;
         int curr = 0;
         while (true){
             String gene = findGene(dna,curr);
@@ -45,16 +46,12 @@ public class Part1 {
           if(gene.isEmpty()){
               break;
           } System.out.println(gene);
+          if (gene.length()>60){
+          count++;}
             curr = dna.indexOf(gene, curr)+ gene.length();
         }
-         String dna1 = "CTGCCTGCATGATCGTA";
-         int pos = dna1.indexOf("TG");
-         int count = 0;
-         while (pos >= 0) {
-             count = count + 1;
-             pos = dna1.indexOf("TG",pos+1);
-         }
          System.out.println(count);
+
      }
     public static void testFindStopCodon(){
         String a = "cccatggggtttaaataataataggagagagagagagagttt";
@@ -133,11 +130,15 @@ public class Part1 {
         } return count;
     }
     public static void processGenes (StorageResource sr){
+        int longest = 0;
         int all = 0;
         int count9 = 0;
         int countcg = 0;
         int count3 = 0;
         for(String s: sr.data()){
+            if(s.length()>longest){
+                longest = s.length();
+            }
             all++;
                 if( s.length()>60){
                     //System.out.println(s.length());
@@ -150,23 +151,44 @@ public class Part1 {
                     System.out.println("cgRatio> 0.35");
                     System.out.println(s);
                 }
-                if (countCTG(s)> 0.35){
-                    count3++;
-                    System.out.println("CTG >0.35 ");
-                    System.out.println(s);
 
-                }
         }
-        System.out.println("number >9 is "+ count9);
+        System.out.println("number >60 is "+ count9);
         System.out.println("count cg>0.35 is "+ countcg);
         System.out.println("ctg count us "+ count3);
         System.out.println("Всего "+ all);
+        System.out.println("longest gene is "+ longest);
+    }
+    public static String mystery(String dna) {
+        //AATGCTAACTAGCTGACTAAT
+        int pos = dna.indexOf("T");//found index for first T is 2
+        int count = 0;
+        int startPos = 0;
+        String newDna = "";
+        if (pos == -1) {
+            return dna;// if not found return full string
+        }
+        while (count < 3) {
+            count += 1;
+            newDna = newDna + dna.substring(startPos,pos);//take part from start po to pos of found T (not included)
+            System.out.println(newDna);
+            startPos = pos+1;//increase pos number
+            pos = dna.indexOf("T", startPos);// and go searhing
+            if (pos == -1) {
+                break;
+            }
+        }
+        newDna = newDna + dna.substring(startPos);
+        return newDna;
     }
     public static void test() {
-        FileResource fr = new FileResource("src/my/dukeuniversity/shapes/brca1line.fa");
-        String dna = fr.asString();
+        FileResource fr = new FileResource("src/my/dukeuniversity/shapes/GRch38dnapart.fa");
+        String dna = fr.asString().toLowerCase();
+        System.out.println(countCTG(dna.toUpperCase()));
+        String a = "AATGCTAACTAGCTGACTAAT";
+        //System.out.println(mystery(a));
+        //processGenes(getAllGenes(dna));
 
-        processGenes(getAllGenes(dna));
     }
 
 }
