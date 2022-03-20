@@ -17,8 +17,8 @@ public class ExampleCsv {
         //listExporters(f,"sugar");
         String c = "Nauru";
        // System.out.println(countryInfo(f,c));
-        //listExportersTwoProducts(f,"gold","diamonds");
-        //System.out.println(numberOfExporters(p,"gold"));
+        listExportersTwoProducts(f,"cotton","flowers");
+        System.out.println(numberOfExporters(f,"cocoa"));
         bigExporters(f,"$999,999,999,999");
     };
 
