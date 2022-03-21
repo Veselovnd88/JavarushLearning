@@ -14,8 +14,8 @@ public class Babynames {
         //System.out.println("Rank of name and gender is: "+ getRank(2012,"Mason", "M"));
         //System.out.println("Name of rank and gender is: "+ getName(2012,15, "M"));
         //whatIsNameInYear("Isabella", 2012,2014,"F");
-        System.out.println("Highest ranking was at "+yearOfHighestRank("Mason", "M"));
-
+        //System.out.println("Highest ranking was at "+yearOfHighestRank("Mason", "M"));
+        System.out.println("Average rank is "+ getAverageRank("Jacob","M"));
     }
     public static void totalBirth(){
         System.out.println("TotalBirth task#1 started");
@@ -101,4 +101,32 @@ public class Babynames {
             return year;
         }
     }
+    public static double getAverageRank(String name, String gender){
+        System.out.println("This is Average rank task #6");
+        DirectoryResource dr = new DirectoryResource();
+        int count=0;
+        double allRank=0;
+        for(File f: dr.selectedFiles()){
+                int rank = 0;
+                FileResource fr = new FileResource(f);
+                for (CSVRecord r: fr.getCSVParser(false)){
+                    if(r.get(1).equals(gender)){
+                        rank++;
+                        if(r.get(0).equals(name)){
+                            count++;
+                            allRank+=rank;
+                            break;
+                        }
+                    }
+                }
+        }
+    if (count==0){
+            return -1;
+        }
+        else{return (double) allRank/count;}
+}
+public static int   getTotalBirthsRankedHigher(int year, String name, String gender){
+        int birthCount = 0;
+}
+
 }
