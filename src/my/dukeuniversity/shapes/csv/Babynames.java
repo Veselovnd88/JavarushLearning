@@ -11,11 +11,13 @@ public class Babynames {
 
     public static void task(){
         //totalBirth();//1 task
-        //System.out.println("Rank of name and gender is: "+ getRank(2012,"Mason", "M"));
-        //System.out.println("Name of rank and gender is: "+ getName(2012,15, "M"));
-        //whatIsNameInYear("Isabella", 2012,2014,"F");
-        //System.out.println("Highest ranking was at "+yearOfHighestRank("Mason", "M"));
-        System.out.println("Average rank is "+ getAverageRank("Jacob","M"));
+        //System.out.println("Rank of name and gender is: "+ getRank(1971,"Frank", "M"));
+      // System.out.println("Name of rank and gender is: "+ getName(1980,350, "F"));
+        //whatIsNameInYear("Owen", 1974,2014,"M");
+       // System.out.println("Highest ranking was at "+yearOfHighestRank("Genevieve", "F"));
+        System.out.println("Highest ranking was at "+yearOfHighestRank("Mich", "M"));
+       // System.out.println("Average rank is "+ getAverageRank("Robert","M"));
+        //System.out.println("Total births are "+ getTotalBirthsRankedHigher(2012, "Drew","M"));
     }
     public static void totalBirth(){
         System.out.println("TotalBirth task#1 started");
@@ -80,19 +82,23 @@ public class Babynames {
         int year = 0;
         for (File f: dr.selectedFiles()){
             int rank = 0;
+            int myrank = minRank;
             FileResource fr = new FileResource(f);
             for (CSVRecord r: fr.getCSVParser(false)){
+
                 if(r.get(1).equals(gender)){
                     rank++;
                     if(r.get(0).equals(name)){
+                        myrank = rank;
                         break;
                     }
                 }
             }
             //System.out.println(rank);
 
-            if (rank<minRank){
-                minRank=rank;
+            if (myrank<minRank){
+                System.out.println(minRank);
+                minRank=myrank;
                 year = Integer.parseInt(f.getName().substring(3,7));
             }
         } if(year==0){
@@ -126,7 +132,21 @@ public class Babynames {
         else{return (double) allRank/count;}
 }
 public static int   getTotalBirthsRankedHigher(int year, String name, String gender){
+    System.out.println("Started getTotalBirthRanked higher Task #7 for year "+year);
         int birthCount = 0;
+        FileResource fr = new FileResource();
+        for(CSVRecord r: fr.getCSVParser(false)){
+            if(r.get(1).equals(gender)){
+
+                if (r.get(0).equals(name)){
+                    break;
+                }
+                else{
+                    birthCount+=Integer.parseInt(r.get(2));
+                }
+            }
+        }
+return birthCount;
 }
 
 }
