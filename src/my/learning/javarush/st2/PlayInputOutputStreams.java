@@ -3,7 +3,7 @@ package my.learning.javarush.st2;
 import my.learning.javarush.arrays.ArraysTasks;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 
 public class PlayInputOutputStreams {
 
@@ -51,24 +51,42 @@ public class PlayInputOutputStreams {
     }
 
     public static void oftenBytes(){
-        ArrayList<Integer> l = new ArrayList<>(255);
-        for(int i=0; i<l.size();i++){
-            l.add(0);
-        }
+        //src/my/learning/javarush/arrays/in.txt
+        HashMap<Integer,Integer> hm = new HashMap<>();
+
+        int count = 0;
         try{
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String file = br.readLine();
             FileInputStream fis = new FileInputStream(file);
             while (fis.available()>0){
+                count++;
                 int bt = fis.read();
-                System.out.println(bt);
-                if(l.get(bt)>0){
-                    l.set(bt, l.get(bt+1));
+                if (hm.containsKey(bt)){
+                    hm.put(bt, hm.get(bt)+1);
                 }
-                else{l.set(bt, 0);};
-            }fis.close();
-            System.out.println(l.size());
-            l.forEach(x-> System.out.println(x));
+                else {
+                    hm.put(bt,1);
+                }
+            } int max=0;
+            for (Map.Entry<Integer,Integer> en: hm.entrySet()){
+                if (en.getValue()>max){
+                    max = en.getValue();
+                }
+            }
+            for (Map.Entry<Integer, Integer> en :hm.entrySet()){
+                if( en.getValue()==max){
+                    System.out.print(en.getKey()+" ");
+                }
+            }
+
+
+            fis.close();
+            //System.out.println(l.size());
+            //System.out.println(count);
+
+
+
         } catch (Exception e){
             e.printStackTrace();
 
