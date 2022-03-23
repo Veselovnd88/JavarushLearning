@@ -1,7 +1,7 @@
-hello
-hate
+hello,,
+hate,,,
 vasya
-petya
+petya,
 asdf
 asdf
 sdfasdfasdf
