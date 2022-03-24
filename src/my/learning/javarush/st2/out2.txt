@@ -1,0 +1,2 @@
+arush/st2/out1.txt
+src/my/learning/javarush/st2/out2.txt

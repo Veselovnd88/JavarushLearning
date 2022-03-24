@@ -8,7 +8,7 @@ import java.util.*;
 public class PlayInputOutputStreams {
 
     public static void task(){
-        commas();
+        read1000();
 
     }
     public static void training(){
@@ -164,5 +164,78 @@ public class PlayInputOutputStreams {
         catch ( Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static void divideBytes(){
+
+        //src/my/learning/javarush/arrays/in.txt
+        int count1 = 0;
+        int count2= 0;
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String file1 = br.readLine();
+            String file2 = br.readLine();
+            String file3 = br.readLine();
+            FileInputStream fis = new FileInputStream(file1);
+            FileOutputStream fout1 = new FileOutputStream(file2);
+            FileOutputStream fout2 = new FileOutputStream(file3);
+            int len = fis.available();
+            while(fis.available()>0){
+                if(fis.available()>len/2){
+                    fout1.write(fis.read());
+                    count1++;
+                } else{
+                    fout2.write(fis.read());
+                    count2++;
+                }
+
+            }fis.close();
+            fout1.close();
+            fout2.close();
+            System.out.println(count1);
+            System.out.println(count2);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void reverseBytes(){
+        List<Integer> buff = new ArrayList<>();
+        try{
+            BufferedReader br = new BufferedReader( new InputStreamReader(System.in));
+            String file1 = br.readLine();
+            String file2 = br.readLine();
+            FileInputStream fis = new FileInputStream(file1);
+            FileOutputStream fout1 = new FileOutputStream(file2);
+            while(fis.available()>0){
+                buff.add(fis.read());
+            }
+            for(int i=buff.size()-1; i>=0;i--){
+                fout1.write(buff.get(i));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void read1000(){
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            while (true){
+                String file = br.readLine();
+                FileInputStream fis = new FileInputStream(file);
+                if(fis.available()<1000){
+                    fis.close();
+                    throw new DownloadException();
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static class DownloadException extends Exception {
+
     }
 }

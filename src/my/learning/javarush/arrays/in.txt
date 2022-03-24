@@ -1,7 +1,3 @@
-hello,,
-hate,,,
-vasya
-petya,
-asdf
-asdf
-sdfasdfasdf
+src/my/learning/javarush/arrays/in.txt
+src/my/learning/javarush/st2/out1.txt
+src/my/learning/javarush/st2/out2.txt
