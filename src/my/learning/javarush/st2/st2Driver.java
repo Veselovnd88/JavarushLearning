@@ -11,8 +11,8 @@ public class st2Driver {
 
 
     public static void main(String[] args) throws Exception {
-
-    //PricesTask.task(args[0], args[1], args[2], args[3]);
-    PricesTask.task("1", "1", "1", "1");
+    if (args.length!=0){
+    PricesTask.task(args[0], args[1], args[2], args[3]);}
+    //PricesTask.task("1", "1", "1", "1");
 }}
 
