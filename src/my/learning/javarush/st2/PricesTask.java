@@ -78,6 +78,16 @@ public class PricesTask {
 
     public static void update(String id, String product, String price, String quantity){
             List<String> list = new ArrayList<>();
+            String myId;
+            StringBuilder sbId = new StringBuilder();
+            sbId.append(id);
+            if(id.length()<8){
+                for(int i=0; i<(8-id.length());i++){
+                    sbId.append(" ");
+                }
+            }
+            myId = sbId.toString();
+
         try {
             //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             //String file = br.readLine();
@@ -90,20 +100,30 @@ public class PricesTask {
                 list.add(line);// filling all  list by lines from file
             }
             for (int i=0; i<list.size();i++){
-                if(list.get(i).substring(0,8).equals(id)){
+                if(list.get(i).substring(0,8).equals(myId)){
 
                     StringBuilder sb = new StringBuilder();
-
-
-
-                    sb.append(id);
+                    sb.append(myId);
                     sb.append(product);
+                    if(product.length()<30){
+                        for (int j = 0; j < 30- product.length(); j++) {
+                            sb.append(" ");
+                        }
+                    }
                     sb.append(price);
+                    if(price.length()<8){
+                        for (int j = 0; j < 8- price.length(); j++) {
+                            sb.append(" ");
+                        }
                     sb.append(quantity);
+                        if(quantity.length()<4){
+                            for (int j = 0; j < 4- quantity.length(); j++) {
+                                sb.append(" ");
+                            }
 
                     list.set(i,sb.toString());
                     //System.out.println(list);
-                }
+                } } }
             }
             FileWriter fw = new FileWriter(file);
             for (int i=0; i<list.size();i++){
@@ -125,6 +145,15 @@ public class PricesTask {
 
         }
     public static void delete(String id){
+        String myId;
+        StringBuilder sbId = new StringBuilder();
+        sbId.append(id);
+        if(id.length()<8){
+            for(int i=0; i<(8-id.length());i++){
+                sbId.append(" ");
+            }
+        }
+        myId = sbId.toString();
         List<String> list = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -138,7 +167,7 @@ public class PricesTask {
                 list.add(line);// filling all  list by lines from file
             }
             for(int i=0; i<list.size(); i++){
-                if(list.get(i).substring(0,8).equals(id)){
+                if(list.get(i).substring(0,8).equals(myId)){
                     list.remove(i);
                     //System.out.println("Удалил");
                 }
