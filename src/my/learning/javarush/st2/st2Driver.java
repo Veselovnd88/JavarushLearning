@@ -11,6 +11,6 @@ public class st2Driver {
 
 
     public static void main(String[] args) throws Exception {
-        Letters.task(args);
+        WriteToFiles.task2();
 }}
 
