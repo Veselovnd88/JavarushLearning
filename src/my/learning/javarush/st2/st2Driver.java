@@ -11,6 +11,6 @@ public class st2Driver {
 
 
     public static void main(String[] args) throws Exception {
-        WriteToFiles.task2();
+        EngSymbols.task(args);
 }}
 
