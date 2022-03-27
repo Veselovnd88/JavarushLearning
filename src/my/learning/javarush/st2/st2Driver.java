@@ -11,9 +11,6 @@ public class st2Driver {
 
 
     public static void main(String[] args) throws Exception {
-    if (args.length!=0){
-    PricesTask.task(args[0],args);
-    }
-    //PricesTask.task("1", "1", "1", "1");
+        Letters.task(args);
 }}
 
