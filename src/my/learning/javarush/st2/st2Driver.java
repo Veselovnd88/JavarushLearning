@@ -16,7 +16,7 @@ public class st2Driver {
 
 
     public static void main(String[] args) throws Exception {
-        WriterReaderPlain.epictask();
+        WriterReaderPlain.task5();
 }
 
 
