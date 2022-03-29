@@ -1,6 +1,8 @@
 package my.learning.javarush.st2;
 
 import my.learning.javarush.st2.adapters.AdaptInterfaces;
+import my.learning.javarush.st2.adapters.OneMoreAdapterTask;
+import my.learning.javarush.st2.adapters.PersonScannerTask;
 import my.learning.javarush.st2.aptekatask.AptekaTask;
 import my.learning.javarush.st2.atm.Bankomat;
 import my.learning.javarush.st2.atm.TransactionTask;
@@ -13,7 +15,7 @@ public class st2Driver {
 
 
     public static void main(String[] args) throws Exception {
-        AdaptInterfaces.task();
+        OneMoreAdapterTask.task();
 }
 
 
