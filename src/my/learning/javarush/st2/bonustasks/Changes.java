@@ -1,6 +1,6 @@
 package my.learning.javarush.st2.bonustasks;
 
-import my.learning.javarush.st2.DebugTask;
+
 /*
 src/my/learning/javarush/st2/out1.txt
 src/my/learning/javarush/st2/out2.txt
@@ -27,17 +27,40 @@ public class Changes {
             while (brF2.ready()){
                 file2.add(brF2.readLine());
             }
-            while(file1.size()>0){
+            while(file1.size()>0 &&file2.size()>0){
                 if(file1.get(0).equals(file2.get(0))){
                     lines.add(new LineItem(Type.SAME, file1.get(0)));
                     file1.remove(0);
                     file2.remove(0);
                 }
-                else if(file1.get(0)!= )
+
+                //1     1
+                // 2    2
+                // 3    3
+                //4     4
+                else if(!file1.get(0).equals(file2.get(1)) ){//сравниваем первую строку со следующей
+                    //если не равна = то значит строку 0 - удалили, соответственно из первого файла тоже удаляем
+                    //и начинаем сравнивать следующие
+                    lines.add(new LineItem(Type.REMOVED, file1.get(0)));
+                    file1.remove(0);
+                }
+                else { lines.add(new LineItem(Type.ADDED,file2.get(0)));
+                        file2.remove(0);
+                        /*
+                        если же равны - значит строку - добавили. удаляем и начинаем сверять дальше.
+                         */
 
                 }
-
-
+                }
+            if(file1.size()>0){
+                for(int i=0; i<file1.size(); i++){
+                    lines.add(new LineItem(Type.REMOVED, file1.get(i)));
+                }}
+            else{
+                for (int i=0; i<file2.size();i++){
+                    lines.add(new LineItem(Type.ADDED, file2.get(i)));
+                }
+            }
             brF2.close();
             brF1.close();
             fr2.close();
