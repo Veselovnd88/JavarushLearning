@@ -49,21 +49,23 @@ src/my/learning/javarush/st2/bonustasks/sample.html
             closes.add(ind);
             start = ind+3+tag.length();
         }
-        System.out.println(opens);
-       System.out.println(closes);
+       // System.out.println(opens);
+       //System.out.println(closes);
 
         while (closes.size()>0){
             int startInd = 0;
+            int diffMin = Integer.MAX_VALUE;
+            boolean removed=false;
             for(int i=0; i<opens.size(); i++){
 
-                    int diffMin = Integer.MAX_VALUE;
+
                     int diff = closes.get(0) - opens.get(i);
 
 
                     if(diff<diffMin && closes.get(0)>=opens.get(i)&&opens.size()>1){
-                        System.out.println(opens);
-                        System.out.println(closes);
-                        System.out.println("compare " + closes.get(0)+ "and"+ opens.get(i));
+                        //System.out.println(opens);
+                        //System.out.println(closes);
+                        //System.out.println("compare " + closes.get(0)+ "and"+ opens.get(i));
                         diffMin = diff;
 
                     }
@@ -82,27 +84,31 @@ src/my/learning/javarush/st2/bonustasks/sample.html
                         System.out.println(testedStr.substring(startInd,closes.get(0)+3+tag.length()));
                         closes.remove(0);
                         if(opens.size()>1){
-                        opens.remove(i-1);}
+                        opens.remove(i-1);
+                            removed=true;}
+
                         else{
                             opens.remove(i);
+                            removed=true;
                         }
-                        System.out.println("im here opens"+ opens);
-                        System.out.println("im here closes"+closes);
+                        //System.out.println("im here opens"+ opens);
+                        //System.out.println("im here closes"+closes);
 
                         break;}
 
 
             }
+            if(!removed){
             if(opens.size()==0){
                 break;
             } else {
             startInd = opens.get(opens.size()-1);
             System.out.println(testedStr.substring(startInd,closes.get(0)+3+tag.length()));
-                System.out.println("last opens"+ opens);
-                System.out.println("last closes"+closes);
+                //System.out.println("last opens"+ opens);
+                //System.out.println("last closes"+closes);
             closes.remove(0);
             //System.out.println(startInd);
-            opens.remove(opens.size()-1);}
+            opens.remove(opens.size()-1);}}
 
         }
 
