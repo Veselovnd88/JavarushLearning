@@ -48,8 +48,8 @@ src/my/learning/javarush/st2/bonustasks/sample.html
             closes.add(ind);
             start = ind+3+tag.length();
         }
-        //System.out.println(opens);
-       // System.out.println(closes);
+        System.out.println(opens);
+       System.out.println(closes);
 
         while (closes.size()>0){
             int startInd = 0;
@@ -57,7 +57,7 @@ src/my/learning/javarush/st2/bonustasks/sample.html
 
                     int diffMin = Integer.MAX_VALUE;
                     int diff = closes.get(0) - opens.get(i);
-                    //System.out.println(diff);
+                    System.out.println(diff);
                     if(diff<diffMin && closes.get(0)>opens.get(i)&&opens.size()>1){
                         diff = diffMin;
                     }
@@ -70,8 +70,8 @@ src/my/learning/javarush/st2/bonustasks/sample.html
                             startInd = opens.get(i);
                         }
 
-                        //System.out.println(opens);
-                        //System.out.println(closes);
+                        System.out.println(opens);
+                        System.out.println(closes);
 
                         System.out.println(testedStr.substring(startInd,closes.get(0)+3+tag.length()));
                         closes.remove(0);
