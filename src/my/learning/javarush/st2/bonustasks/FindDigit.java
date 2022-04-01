@@ -33,6 +33,9 @@ public class FindDigit {
                     }
                 }
             }
+            fw.write(sb.toString());
+            fw.close();
+            br.close();
             System.out.println(sb.toString());
         }
         catch (Exception e){
