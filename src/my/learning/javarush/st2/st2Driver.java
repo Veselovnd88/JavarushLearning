@@ -10,7 +10,7 @@ public class st2Driver {
 
 
     public static void main(String[] args) throws Exception {
-        FindDigit.task(args);
+        ChangeDigits.task();
 }
 
 
