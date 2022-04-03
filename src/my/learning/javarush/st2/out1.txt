@@ -1,3 +1,3 @@
-name no
-assets yes
-hate 100.0
+users yes
+Vanya Ivanov 1648984768060 true Other
+Vanyda Ivanovsdf 1648984768060 true Other
