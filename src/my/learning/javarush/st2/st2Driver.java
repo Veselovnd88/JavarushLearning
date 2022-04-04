@@ -11,7 +11,7 @@ public class st2Driver {
 
 
     public static void main(String[] args) throws Exception {
-        WrongHuman.task(args);
+        AppartmentsTask.task(args);
 }
 
 
