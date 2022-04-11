@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class st3Driver {
     public static void main(String[] args) throws IOException {
-        addFile.task(args);
+        CustomTreeTask.task(args);
 
     }
 }
