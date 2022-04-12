@@ -9,6 +9,7 @@ import java.util.List;
 public class CustomTree extends AbstractList<String> implements Serializable,Cloneable {
     public Entry<String> root;
     public List<Entry> listTree = new ArrayList<>();
+    private List<Entry> removeList = new ArrayList<>();
 
     public CustomTree(){
         this.root = new Entry<>("name");
@@ -45,6 +46,80 @@ public class CustomTree extends AbstractList<String> implements Serializable,Clo
                 }
             }
         } return false;
+    }
+
+
+
+    @Override
+    public boolean remove(Object o) {
+        if (! (o instanceof String)){
+            throw new UnsupportedOperationException();
+        }
+        String name = (String) o;
+        for (Entry e:listTree){
+                if(e.elementName.equals(name)){
+                    subRemove(e);
+                    setAvailables();
+                    return true;
+                }
+            }return false; }
+
+
+    public boolean checkAvailables(){
+        boolean flag = false;
+        for (Entry e: listTree){
+            if(e.availableToAddRightChildren || e.availableToAddLeftChildren){
+               flag = true;
+
+            }
+        } return flag;
+    }
+    public void setAvailables(){
+        if(!checkAvailables()){
+        for (Entry e: listTree){
+            //System.out.println("Проверяю ентри " +e.elementName);
+            //System.out.println("Левая "+e.availableToAddLeftChildren);
+            //System.out.println("Правая "+ e.availableToAddRightChildren);
+//            System.out.println(e.rightChild.elementName+"____"+ e.leftChild.elementName);
+            if(e.leftChild==null){
+                //System.out.println("Нет левой ветки у "+e.elementName);
+                e.availableToAddLeftChildren=true;
+            }
+            if(e.rightChild==null){
+                //System.out.println("Нет правой ветки у "+e.elementName);
+                e.availableToAddRightChildren=true;
+            }
+        }
+    }}
+
+    public void subRemove(Entry e){
+        if(e.rightChild!=null){
+
+            subRemove(e.rightChild);
+
+        }
+        if(e.leftChild!=null){
+            subRemove(e.leftChild);
+
+        }
+        if(e.parent.rightChild!=null){
+            if(e.parent.rightChild.equals(e)){
+                e.parent.rightChild = null;
+                //e.parent.availableToAddRightChildren = true;
+            }
+        }
+        if(e.parent.leftChild!=null){
+            if(e.parent.leftChild.equals(e)){
+                e.parent.leftChild = null;
+                //e.parent.availableToAddLeftChildren = true;
+            }
+        }
+
+
+
+        listTree.remove(e);
+
+
     }
 
 
@@ -87,6 +162,8 @@ public class CustomTree extends AbstractList<String> implements Serializable,Clo
     public String remove(int index) {
         throw new UnsupportedOperationException();
     }
+
+
 
     @Override
     public boolean addAll(int index, Collection<? extends String> c) {
