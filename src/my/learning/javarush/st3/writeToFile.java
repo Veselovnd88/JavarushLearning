@@ -1,8 +1,6 @@
 package my.learning.javarush.st3;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 
 public class writeToFile {
 
@@ -50,4 +48,57 @@ public class writeToFile {
 
 
         }
+
+        public static void stringwriterreader() throws IOException {
+            StringWriter writer = getAllDataFromInputStream(new FileInputStream("src/my/learning/javarush/st3/allFilesContent.txt"));
+            System.out.println(writer.toString());
+        }
+
+    public static StringWriter getAllDataFromInputStream(InputStream is) throws IOException {
+
+        StringWriter sw  = new StringWriter();
+        if(is!=null){
+            char[] buffer = new char[1024];
+
+            try(
+                Reader r = new BufferedReader(new InputStreamReader(is))){
+                int length;
+                while ((length = r.read(buffer))!=-1){
+                    sw.write(buffer,0,length);
+                }
+
+            }
+        }
+
+        return sw;
+
+
+
+    }
+
+    public static String getStackTrace(Throwable throwable){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+
+        throwable.printStackTrace(pw);
+        return sw.toString();
+
+    }
+
+    public static void task5() throws IOException {
+        StringReader reader = new StringReader("Khoor#Dpljr#&C,₷B'3");
+        System.out.println(decode(reader, -3));  //Hello Amigo #@)₴?$0
+    }
+    public static String decode(StringReader reader, int key) throws IOException {
+          StringWriter sw = new StringWriter();
+          if(reader!=null){
+              int c;
+              while(!((c=reader.read()) ==-1)){
+                  sw.write(c+key);
+              }
+          }
+        return sw.toString();
+    }
+
+
 }
