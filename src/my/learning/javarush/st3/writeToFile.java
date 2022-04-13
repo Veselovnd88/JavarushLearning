@@ -107,13 +107,44 @@ public class writeToFile {
     public static ByteArrayOutputStream getPassword() {
         //65-90 заглавные 97-122 строчные 48-57 цифры   91-96 58-64
         Random random = new Random();
-       int num  = random.nextInt(26)+65;
-       byte[] b = new byte[8];
-       b[0] = (byte) num;
-        String str = new String(b);
-        System.out.println(str);
 
-        return null;
+
+        char[] b = new char[8];
+       //b[0] = (byte) num;
+       boolean hasUpper = false;
+       boolean hasLower = false;
+       boolean hasDigit = false;
+       while(!(hasDigit&&hasLower&&hasUpper)){
+       for(int i=0; i<b.length; i++){
+           int choose = random.nextInt(3);
+           //System.out.println(choose);
+           if (choose==0){
+               //65-90 заглавные 97-122 строчные 48-57 цифры
+               b[i] = (char) (random.nextInt(26)+65);
+
+               hasUpper = true;
+           }
+           else if(choose==1){
+                b[i] = (char) (random.nextInt(26)+97);
+                hasLower=true;
+           }
+           else {
+               b[i] = (char) (random.nextInt(10)+48);
+               hasDigit=true;
+           }
+       }}
+       ByteArrayOutputStream bos = null;
+       String result = new String(b);
+        //System.out.println(result);
+       try {
+       bos = new ByteArrayOutputStream();
+       bos.write(result.getBytes());
+       }
+       catch (IOException e){
+           e.printStackTrace();
+       } return bos;
+        //String str = new String(b);
+        //System.out.println(str)
     }
 
 
