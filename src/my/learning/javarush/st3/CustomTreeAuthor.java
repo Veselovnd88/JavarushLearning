@@ -10,16 +10,16 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
     /**
      * Стартовый корень для дерева;
      */
-    private Entry<String> root;
+    private Entry<String> root;//корень
 
     /**
      * root инициализируется по умолчанию, и становится первым элементом обозначенным как "новый корневой элемент для
      * текущего уровня дерева"; newLineRootElement - всегда крайний левый нижний элемент дерева.
      */
     public CustomTreeAuthor() {
-        root = new Entry<String>(null);
-        root.newLineRootElement = true;
-        root.lineNumber = 0;
+        root = new Entry<String>(null);//конструктор - инициализация коренного элемента
+        root.newLineRootElement = true;//добавился рут, поле стало тру, корень новой линии
+        root.lineNumber = 0;//номер линии=0
     }
 
     /**
@@ -32,9 +32,9 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
     public String getParent(String value) {
         setValidCollection();
         String s = null;
-        for (Entry<String> entry : queue) {
-            if (entry.lineNumber != 1) {
-                if (entry.elementName.equals(value)) {
+        for (Entry<String> entry : queue) {// для кажого элемента
+            if (entry.lineNumber != 1) { //если линия номер линии не равен 1, понять где она у нас инкрементируется
+                if (entry.elementName.equals(value)) {//если найден искомый элемент - то возвращаем его , если нет то будет нулл
                     s = entry.parent.elementName;
                     break;
                 }
@@ -46,7 +46,7 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
     /**
      * Коллекция для хранения элементов дерева.
      */
-    private transient ArrayList<Entry<String>> queue;
+    private transient ArrayList<Entry<String>> queue;//коллеция - список
 
     /**
      * Метод setUpCollection проходит по дереву, начиная с элемента Entry<String> root и перезаписывает все элементы в
@@ -55,23 +55,23 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
      * @param root начальный элемент Entry<String> для вертикального прохода по дереву.
      */
     private void setUpCollection(Entry<String> root) {
-        queue = new ArrayList<>();
-        Queue<Entry<String>> subQueue = new LinkedList<Entry<String>>();
-        queue.add(root);
-        subQueue.add(root);
-        do {
-            if (!subQueue.isEmpty()) {
-                root = subQueue.poll();
+        queue = new ArrayList<>();// инициализация - эта то очередь в которой будут храниться все элементы начиная с рут
+        Queue<Entry<String>> subQueue = new LinkedList<Entry<String>>();// новая очередь в связном списке
+        queue.add(root);// добавили сюда коренной элемент
+        subQueue.add(root);// во вторую очередь тоже
+        do {//цикл ду вайл
+            if (!subQueue.isEmpty()) {//если вторая очередб не пустая
+                root = subQueue.poll();// рут  - первый элемент из очереди
             }
-            if (root.leftChild != null) {
+            if (root.leftChild != null) {//если есть член слева то добавляем в обе очередь
                 queue.add(root.leftChild);
                 subQueue.add(root.leftChild);
             }
-            if (root.rightChild != null) {
+            if (root.rightChild != null) {// то же самое для правого
                 queue.add(root.rightChild);
                 subQueue.add(root.rightChild);
             }
-        } while (!subQueue.isEmpty());
+        } while (!subQueue.isEmpty());//и втоге получается что мы добавляем все элементы начиная с рут в основную очередь которая у нас список
 
     }
 
@@ -81,7 +81,7 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
      * @param entry начальный элемент Entry<String> для вертикального прохода по дереву.
      * @return полученную коллекцию (List<Entry<String>>) элементов дерева.
      */
-    private List<Entry<String>> getCollection(Entry<String> entry) {
+    private List<Entry<String>> getCollection(Entry<String> entry) {//возвращает коллецию, сетАп записывает в имеющийся список-поле, а этот возвращает
         ArrayList<Entry<String>> list = new ArrayList<>();
         Queue<Entry<String>> subQueue = new LinkedList<Entry<String>>();
         list.add(entry);
@@ -109,7 +109,7 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
      */
     private void setValidCollection() {
         setUpCollection(root);
-        queue.remove(0);
+        queue.remove(0);//удалили корень
     }
 
     @Override
@@ -126,7 +126,7 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
     @Override
     public int indexOf(Object o) {
         String string = String.valueOf(o);
-        setValidCollection();
+        setValidCollection();//удаление корня
         for (Entry<String> entry : queue) {
             if (entry.elementName.equals(string)) {
                 return queue.indexOf(entry);
@@ -170,11 +170,11 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
      */
     @Override
     public boolean add(String s) {
-        setUpCollection(root);
+        setUpCollection(root);//создали фулл коллекцию
         for (Entry<String> entry : queue) {
-            entry.checkChildren();
+            entry.checkChildren();//проверяет возможность создания дочерних элементов
             if (entry.isAvailableToAddChildren()) {
-                createChild(entry, s);
+                createChild(entry, s);// добавили
                 setValidCollection();
                 return true;
             }
@@ -302,10 +302,10 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
      * переменной newLineRootElement, которая подлежит изменению;
      */
     private List<Entry<String>> getNewLineRootElementsCollection(Entry<String> entry) {
-        ArrayList<Entry<String>> list = new ArrayList<>();
-        list.add(entry);
-        if ((entry.parent != null) && (entry.parent.newLineRootElement)) {
-            list.addAll(getNewLineRootElementsCollection(entry.parent));
+        ArrayList<Entry<String>> list = new ArrayList<>();//список
+        list.add(entry);//добавили тот элемент который передали
+        if ((entry.parent != null) && (entry.parent.newLineRootElement)) {//если родительский не ноль и у родительского установлено в тру
+            list.addAll(getNewLineRootElementsCollection(entry.parent));//добавляем всё сверху в этот список
         }
         return list;
     }
@@ -317,10 +317,10 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
      * @param s      значение elementName для нового элемента Entry<String>;
      */
     private void createChild(Entry<String> parent, String s) {
-        Entry<String> newOne = new Entry<String>(s);
+        Entry<String> newOne = new Entry<String>(s);//создали новый элемент
         newOne.parent = parent;
-        newOne.lineNumber = parent.lineNumber + 1;
-        setChild(parent, newOne);
+        newOne.lineNumber = parent.lineNumber + 1;//заполнили поля и инкрементировали номер линии
+        setChild(parent, newOne);//утановили проверили
     }
 
     /**
@@ -332,17 +332,17 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
      * @param child  элемент-потомок Entry<String>
      */
     private void setChild(Entry<String> parent, Entry<String> child) {
-        if (parent.availableToAddLeftChildren) {
-            parent.leftChild = child;
-            parent.availableToAddLeftChildren = false;
-            if (parent.newLineRootElement) {
-                List<Entry<String>> list = getNewLineRootElementsCollection(parent);
+        if (parent.availableToAddLeftChildren) {// добавление дочерних элементов
+            parent.leftChild = child;//присваивается левое
+            parent.availableToAddLeftChildren = false;//влево устанавливать запрещаем
+            if (parent.newLineRootElement) {//если тру
+                List<Entry<String>> list = getNewLineRootElementsCollection(parent); //отдает список элементов сверху ентри
                 for (Entry<String> entry : list) {
-                    entry.newLineRootElement = false;
+                    entry.newLineRootElement = false;// для каждого этого элемента ставим в фолс
                 }
-                child.newLineRootElement = true;
+                child.newLineRootElement = true;// а для свежедобавленного устанавливаем в тру
             }
-        } else {
+        } else {// та же самая процедура для правого
             parent.rightChild = child;
             parent.availableToAddRightChildren = false;
             if (parent.newLineRootElement) {
@@ -774,17 +774,17 @@ public class CustomTreeAuthor extends AbstractList<String> implements Cloneable,
 
         private Entry(String name) {
             elementName = name;
-            newLineRootElement = false;
-            availableToAddLeftChildren = true;
-            availableToAddRightChildren = true;
+            newLineRootElement = false;// элемент новой линии -
+            availableToAddLeftChildren = true; // можно ли добавить левый
+            availableToAddRightChildren = true;//можно ли добавить правый
         }
 
         public void checkChildren() {
             if (this.leftChild != null) {
-                availableToAddLeftChildren = false;
+                availableToAddLeftChildren = false;//если левый член не ноль - то добавлять нельзя
             }
             if (this.rightChild != null) {
-                availableToAddRightChildren = false;
+                availableToAddRightChildren = false; //если правый член не ноль-  то добавлять нельзя
             }
         }
 
