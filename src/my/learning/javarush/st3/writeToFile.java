@@ -1,6 +1,7 @@
 package my.learning.javarush.st3;
 
 import java.io.*;
+import java.util.Random;
 
 public class writeToFile {
 
@@ -98,6 +99,21 @@ public class writeToFile {
               }
           }
         return sw.toString();
+    }
+    public static void task6(){
+        ByteArrayOutputStream password = getPassword();
+        System.out.println(password.toString());
+    }
+    public static ByteArrayOutputStream getPassword() {
+        //65-90 заглавные 97-122 строчные 48-57 цифры   91-96 58-64
+        Random random = new Random();
+       int num  = random.nextInt(26)+65;
+       byte[] b = new byte[8];
+       b[0] = (byte) num;
+        String str = new String(b);
+        System.out.println(str);
+
+        return null;
     }
 
 

@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class st3Driver {
     public static void main(String[] args) throws IOException {
-        writeToFile.task5();
+        writeToFile.task6();
 
     }
 }
