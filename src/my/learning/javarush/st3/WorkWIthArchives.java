@@ -46,10 +46,10 @@ public class WorkWIthArchives {
                 break;
             }
             try(OutputStream os = new BufferedOutputStream(new FileOutputStream(result))){
-            final int buff = 1024;
-            byte[] buffer = new byte[buff];
-            for(int readbytes;(readbytes = zis.read(buffer,0,buff))>-1;){
-                os.write(buffer,0,readbytes);
+            final int buff = 1024;//размер буфера
+            byte[] buffer = new byte[buff];//массив буфера
+            for(int readbytes;(readbytes = zis.read(buffer,0,buff))>-1;){// От нуля, считали в буфер с нуля до размера
+                os.write(buffer,0,readbytes);// записали и так до тех пор пока не пустой
                 os.flush();
             }
         }}

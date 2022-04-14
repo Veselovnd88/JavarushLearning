@@ -6,8 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class st3Driver {
-    public static void main(String[] args) throws IOException {
-        writeToFile.task6();
+    public static void main(String[] args) throws Exception {
+        ProxyTraining.driver();
 
     }
 }
