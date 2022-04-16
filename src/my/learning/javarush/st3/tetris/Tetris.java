@@ -10,7 +10,8 @@ public class Tetris {
 
     public static void main(String[] args) throws Exception {
         game = new Tetris(10,20);
-        game.run();
+        test.testField();
+        //game.run();
     }
     public Tetris(int width, int height) {
         field = new Field(width, height);
