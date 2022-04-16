@@ -3,20 +3,35 @@ package my.learning.javarush.st3.tetris;
 import java.awt.event.KeyEvent;
 
 public class Tetris {
-    static Tetris game;
-    private Field field;
-    private Figure figure;
-    private boolean isGameOver;
 
-    public static void main(String[] args) throws Exception {
-        game = new Tetris(10,20);
-        test.testField();
-        //game.run();
-    }
+    private Field field;                //Поле с клетками
+    private Figure figure;              //Фигурка
+
+    private boolean isGameOver;         //Игра Окончена?
+
     public Tetris(int width, int height) {
         field = new Field(width, height);
         figure = null;
     }
+
+    /**
+     * Геттер переменной field.
+     */
+    public Field getField() {
+        return field;
+    }
+
+    /**
+     * Геттер переменной figure.
+     */
+    public Figure getFigure() {
+        return figure;
+    }
+
+    /**
+     * Основной цикл программы.
+     * Тут происходят все важные действия
+     */
     public void run() throws Exception {
         //Создаем объект "наблюдатель за клавиатурой" и стартуем его.
         KeyboardObserver keyboardObserver = new KeyboardObserver();
@@ -57,15 +72,42 @@ public class Tetris {
         //Выводим сообщение "Game Over"
         System.out.println("Game Over");
     }
-    public void step(){
 
+    public void step() {
+        //опускаем фигурку вниз
+        figure.down();
+
+        //если разместить фигурку на текущем месте невозможно
+        if (!figure.isCurrentPositionAvailable()) {
+            figure.up();                    //поднимаем обратно
+            figure.landed();                //приземляем
+
+            isGameOver = figure.getY() <= 1;//если фигурка приземлилась на самом верху - игра окончена
+
+            field.removeFullLines();        //удаляем заполненные линии
+
+            figure = FigureFactory.createRandomFigure(field.getWidth() / 2, 0); //создаем новую фигурку
+        }
     }
 
-    public Field getField() {
-        return this.field;
+    /**
+     * Сеттер для figure
+     */
+    public void setFigure(Figure figure) {
+        this.figure = figure;
     }
 
-    public Figure getFigure() {
-        return this.figure;
+    /**
+     * Сеттер для field
+     */
+    public void setField(Field field) {
+        this.field = field;
+    }
+
+    public static Tetris game;
+
+    public static void main(String[] args) throws Exception {
+        game = new Tetris(10, 20);
+        game.run();
     }
 }

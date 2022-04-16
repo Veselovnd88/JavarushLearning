@@ -1,83 +1,136 @@
 package my.learning.javarush.st3.tetris;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Field {
+    //ширина и высота
     private int width;
     private int height;
+
+    //матрица поля: 1 - клетка занята, 0 - свободна
     private int[][] matrix;
 
-    public Field(int width, int height){
+    public Field(int width, int height) {
         this.width = width;
         this.height = height;
         matrix = new int[height][width];
     }
-    public void print(){
-        for(int i = 0; i<height;i++){
-            for(int j=0; j<width;j++){
-                if(matrix[i][j]==0){
-                    System.out.print(".");
-                }
-                else{
-                    System.out.print("X");                }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int[][] getMatrix() {
+        return matrix;
+    }
+
+    /**
+     * Метод возвращает значение, которое содержится в матрице с координатами (x,y)
+     * Если координаты за пределами матрицы, метод возвращает null.
+     */
+    public Integer getValue(int x, int y) {
+        if (x >= 0 && x < width && y >= 0 && y < height)
+            return matrix[y][x];
+
+        return null;
+    }
+
+    /**
+     * Метод устанавливает переданное значение(value) в ячейку матрицы с координатами (x,y)
+     */
+    public void setValue(int x, int y, int value) {
+        if (x >= 0 && x < width && y >= 0 && y < height)
+            matrix[y][x] = value;
+    }
+
+    /**
+     * Метод печатает на экран текущее содержание матрицы
+     */
+    public void print() {
+        //Создаем массив, куда будем "рисовать" текущее состояние игры
+        int[][] canvas = new int[height][width];
+
+        //Копируем "матрицу поля" в массив
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                canvas[i][j] = matrix[i][j];
+            }
+        }
+
+        //Копируем фигурку в массив, только непустые клетки
+        int left = Tetris.game.getFigure().getX();
+        int top = Tetris.game.getFigure().getY();
+        int[][] brickMatrix = Tetris.game.getFigure().getMatrix();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (top + i >= height || left + j >= width) continue;
+                if (brickMatrix[i][j] == 1)
+                    canvas[top + i][left + j] = 2;
+            }
+        }
+
+
+        //Выводим "нарисованное" на экран, но начинаем с "границы кадра".
+        System.out.println("---------------------------------------------------------------------------\n");
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int index = canvas[i][j];
+                if (index == 0)
+                    System.out.print(" . ");
+                else if (index == 1)
+                    System.out.print(" X ");
+                else if (index == 2)
+                    System.out.print(" X ");
+                else
+                    System.out.print("???");
             }
             System.out.println();
         }
 
+
+        System.out.println();
+        System.out.println();
     }
-    public void removeFullLines(){
-        List<int[]> normalLines = new LinkedList<>();
 
-        for(int i=height-1; i>=0; i--){
-            if (Arrays.stream(matrix[i]).allMatch(x-> x!=0)|| Arrays.stream(matrix[i]).allMatch(x-> x==0) ){
-                //System.out.println(Arrays.toString(matrix[i]));
-                //System.out.println("С нулями или единицами");
-                matrix[i] = null;
-            }
-            else{
-                normalLines.add(matrix[i]);
+    public void setMatrix(int[][] matrix) {
+        this.matrix = matrix;
+    }
 
+    /**
+     * Удаляем заполненные линии
+     */
+    public void removeFullLines() {
+        //Создаем список для хранения линий
+        ArrayList<int[]> lines = new ArrayList<int[]>();
+
+        //Копируем все непустые линии в список.
+        for (int i = 0; i < height; i++) {
+            //подсчитываем количество единиц в строке - просто суммируем все ее значения
+            int count = 0;
+            for (int j = 0; j < width; j++) {
+                count += matrix[i][j];
             }
+
+            //Если сумма строки не равна ее ширине - добавляем в список
+            if (count != width)
+                lines.add(matrix[i]);
         }
-        for(int j = height-1; j>=0;j--){
-            if(height-1-j<normalLines.size()){
-                /* лист 2, высота 3
-                если дж=2 - лист ноль
-                если дж = 1 - лист 1
-                дж= 0 - всё
-                 *
-                 */
 
-                matrix[j] = normalLines.get(height-1-j);
-            }
-            else{
-                matrix[j] = new int[width];
-            }
+        //Добавляем недостающие строки в начало списка.
+        while (lines.size() < height) {
+            lines.add(0, new int[width]);
         }
-    }
-    public Integer getValue(int x, int y){
-        return null;
-    }
-    public void setValue(int x, int y, int value){
 
-    }
-
-
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
-    public int[][] getMatrix() {
-        return this.matrix;
-    }
-    public void setMatrix(int[][] m){
-        this.matrix = m;
+        //Преобразуем список обратно в матрицу
+        matrix = lines.toArray(new int[height][width]);
     }
 }
