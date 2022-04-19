@@ -13,8 +13,10 @@ import java.net.URL;
 public class GetInformation {
 
     private String link = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY";
+    private String result;
 
     public String getInfo() throws IOException {
+        if (result!=null){
         URL obj = new URL(this.link);
         HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
         conn.setRequestMethod("GET");
@@ -23,9 +25,11 @@ public class GetInformation {
         StringBuilder sb = new StringBuilder();
         while(br.ready()){
             sb.append(br.readLine());
+        } result = sb.toString();
         }
+
         //System.out.println(sb.toString());
-        return sb.toString();
+        return result;
     }
 
     public Image getImageObj() throws IOException {
