@@ -29,5 +29,6 @@
     </orderEntry>
     <orderEntry type="library" name="fasterxml.jackson.core.databind" level="project" />
     <orderEntry type="library" name="mod" level="project" />
+    <orderEntry type="library" name="mod1" level="project" />
   </component>
 </module>

@@ -4,7 +4,7 @@ import javax.xml.bind.JAXBException;
 
 public class xmlDriver {
 
-    public static void main(String[] args) throws JAXBException {
-        Solution.task();
+    public static void main(String[] args) throws Exception {
+        Solution2.task();
     }
 }
