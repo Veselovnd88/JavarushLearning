@@ -1,9 +1,9 @@
 package my.learning.javarush.st3.space_invaders;
 
 public abstract class BaseObject {
-    private double x;
-    private double y;
-    private double radius;
+    protected double x;
+    protected double y;
+    protected double radius;
 
     private boolean isAlive;
 
