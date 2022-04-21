@@ -32,7 +32,7 @@ public class User {
 
 
     public User(String name, int age, Sex sex){
-
+        if(name!=null && !name.isEmpty() && age>0 && sex!=null){
         this.name = name;
         this.age = age;
         this.sex = sex;
@@ -41,7 +41,7 @@ public class User {
             count_id++;
             allUsers.put(count_id,this);
         }
-    }
+    }}
     public static List<User> getAllUsers(){
         return new ArrayList<>(allUsers.values());
     }
