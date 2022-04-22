@@ -59,4 +59,10 @@ public abstract class BaseObject {
     public void setRadius(double radius) {
         this.radius = radius;
     }
+    public void checkBorders(double minx, double maxx, double miny, double maxy) {
+        if (x < minx) x = minx;
+        if (x > maxx) x = maxx;
+        if (y < miny) y = miny;
+        if (y > maxy) y = maxy;
+    }
 }
