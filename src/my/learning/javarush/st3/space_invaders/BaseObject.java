@@ -7,7 +7,7 @@ public abstract class BaseObject {
 
     private boolean isAlive;
 
-    public void draw(){};
+    public void draw(Canvas canvas){};
     public void move(){};
 
     public void die(){
