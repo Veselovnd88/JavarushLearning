@@ -13,9 +13,9 @@ public class HanoiTower {
             return;
         }
         else{
-            moveRing(a,b,c,numRings-1);
+            moveRing(a,c,b,numRings-1);
             System.out.println("from "+a +" to "+b);
-            moveRing(c,a,b,numRings-1);
+            moveRing(c,b,a,numRings-1);
             return;
         }
 
