@@ -18,4 +18,32 @@ public class Tasks {
         }
         return fibonacci(n-1)+fibonacci(n-2);
     }
+    public static void factTask(){
+        System.out.println(factorial(9));     //362880
+        System.out.println(factorial(0));     //1
+        System.out.println(factorial(1));     //1
+    }
+    public static int factorial(int n){
+        if (n == 0){
+            return 1;
+        }
+        return n*factorial(n-1);
+    }
+
+    public static void recurseTask(){
+        recurse(132);
+    }
+    public static void recurse(int n){
+        if(n<=1){
+            return;
+        }
+        for( int i=2; i<=n; i++){
+            if(n%i==0){
+                System.out.print(i+" ");
+                recurse(n/i);
+                break;
+            }
+        }
+
+    }
 }
