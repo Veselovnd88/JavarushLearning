@@ -48,6 +48,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="slf4j.ext" level="project" />
-    <orderEntry type="library" name="slf4j-api-1.7.12" level="project" />
+    <orderEntry type="library" name="slf4j.api" level="project" />
+    <orderEntry type="library" name="slf4j.log4j12" level="project" />
   </component>
 </module>
