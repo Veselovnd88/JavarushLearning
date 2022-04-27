@@ -2,6 +2,9 @@ package my.learning.javarush.st3.ownSet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Consumer;
@@ -24,6 +27,31 @@ public class AmigoSet<E> extends AbstractSet<E> implements Serializable, Cloneab
 
     public boolean add(E e){
         return map.put(e,PRESENT)==null;
+    }
+
+
+
+    public void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.defaultWriteObject();//сеарилизуется всё что есть по дефолу
+        oos.writeInt(HashMapReflectionHelper.callHiddenMethod(map,"capacity"));// сериализуется капасити
+        oos.writeFloat(HashMapReflectionHelper.callHiddenMethod(map,"loadFactor"));// сериализуется лоадфактор
+        oos.writeInt(map.size());//сериализуется размер
+        for(E e: map.keySet()){// сериализуется каждый элемент
+            oos.writeObject(e);
+        }
+
+    }
+    public void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        int capacity = ois.readInt();
+        float loadFactor = ois.readFloat();
+        map = new HashMap<>(capacity,loadFactor);
+        int size = ois.readInt();
+        for (int i =0; i<size; i++){
+            E e = (E) ois.readObject();
+            map.put(e,PRESENT);
+        }
+
     }
 
 
@@ -51,9 +79,14 @@ public class AmigoSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         AmigoSet<E> newSet = new AmigoSet<>();
-        newSet.map = (HashMap<E, Object>) map.clone();
+        try{
+        newSet.map = (HashMap<E, Object>) map.clone();}
+        catch (Exception e){
+            throw new InternalError();
+
+        }
         return newSet;
 
     }
