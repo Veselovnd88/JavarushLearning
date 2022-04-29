@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
@@ -27,21 +28,60 @@ public class Sol {
 
         List<File> correctFiles = new ArrayList<>();
         File path = new File(pathToAnimals);
+
         for(File f: path.listFiles()){
             if (f.isFile()&&f.getName().endsWith(".class")){
                 correctFiles.add(f);
             }
         }
         correctFiles.forEach(x->{
-            System.out.println(x.getAbsolutePath());
+            ModuleLoader loader = new ModuleLoader(x.getAbsolutePath());
+
+            Class<?> clazz = loader.findClass(x.getAbsolutePath());
+
+            Class<?>[] ints = clazz.getInterfaces();
+           // String pack = clazz.getPackageName();
+           // String interfaceName = pack.substring(0, pack.length()-4)+"Animal";
+
+
+            if(ints.length!=0) {
+                for (Class<?> c : ints) {
+                    if( c ==Animal.class){
+                        //System.out.println(clazz.getName()+ " поддерживает интерфейс "+c.getName());
+                        try{
+
+                            Constructor[] constructors = clazz.getConstructors();
+                            for (Constructor<?> cst :constructors){
+                                if(cst.getParameters().length==0){
+                                    result.add( (Animal) clazz.newInstance()  );
+                                }
+                            }
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InstantiationException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+
+            //System.out.println(clazz.getName());
+
+
         });
+
+
         String classname = "/home/nikolay/IdeaProjects/JavarushLearning/out/production/JavarushLearning/my/learning/javarush/st3/generiks/data/Cat.class";
-        Class clazz = null;
+        String classname1 = "C:\\Users\\VeselovND\\git\\JavarushLearning\\src\\my\\learning\\javarush\\st3\\generiks\\data\\Cat.class";
 
 
 
 
-        return null;
+
+
+
+        return result;
     }
 
 
@@ -49,16 +89,23 @@ public class Sol {
 }
 class ModuleLoader extends ClassLoader{
     private String path;
-    public ModuleLoader(String path, ClassLoader parent){
-        super(parent);
+    public ModuleLoader(String path){
+        super();
         this.path = path;
     }
     @Override
-    public Class<?> findClass(String path){
+    public Class<?> findClass(String name){
         try{
-            byte[] b = fetchClassFS(path);
+            byte[] b = fetchClassFS(name);
+            //System.out.println(b.length);
+            return defineClass(null,b,0, b.length);
         }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
     private static byte[] fetchClassFS(String path) throws IOException {
         InputStream is = new FileInputStream(new File(path));// создали считывающий поток
         long length = new File(path).length();// получили длину
