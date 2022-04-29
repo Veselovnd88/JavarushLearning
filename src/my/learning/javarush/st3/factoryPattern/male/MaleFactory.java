@@ -1,8 +1,9 @@
 package my.learning.javarush.st3.factoryPattern.male;
 
+import my.learning.javarush.st3.factoryPattern.AbstractFactory;
 import my.learning.javarush.st3.factoryPattern.Human;
 
-public class MaleFactory {
+public class MaleFactory implements AbstractFactory {
     public Human getPerson(int age){
         if(age<=KidBoy.MAX_AGE){
             Human boy = new KidBoy();

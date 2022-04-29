@@ -3,14 +3,18 @@ package my.learning.javarush.st3.factoryPattern;
 import my.learning.javarush.st3.factoryPattern.male.MaleFactory;
 
 public class Solution {
-
     public static void main(String[] args) {
-        MaleFactory mf = new MaleFactory();
-        Human one = mf.getPerson(99);
-        Human two = mf.getPerson(4);
-        Human three = mf.getPerson(15);
-        System.out.println(one);
-        System.out.println(two);
-        System.out.println(three);
+        AbstractFactory factory = FactoryProducer.getFactory(FactoryProducer.HumanFactoryType.FEMALE);
+        useFactory(factory);
+
+        factory = FactoryProducer.getFactory(FactoryProducer.HumanFactoryType.MALE);
+        useFactory(factory);
     }
+
+    public static void useFactory(AbstractFactory factory) {
+        System.out.println(factory.getPerson(99));
+        System.out.println(factory.getPerson(4));
+        System.out.println(factory.getPerson(15));
+    }
+
 }
