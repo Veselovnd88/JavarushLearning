@@ -5,7 +5,8 @@ import my.learning.javarush.st3.factoryPattern.male.MaleFactory;
 public class Solution {
     public static void main(String[] args) {
         AbstractFactory factory = FactoryProducer.getFactory(FactoryProducer.HumanFactoryType.FEMALE);
-        useFactory(factory);
+        useFactory(factory);//создаются две разные фабрики
+
 
         factory = FactoryProducer.getFactory(FactoryProducer.HumanFactoryType.MALE);
         useFactory(factory);

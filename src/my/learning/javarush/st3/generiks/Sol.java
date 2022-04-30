@@ -39,20 +39,20 @@ public class Sol {
 
             Class<?> clazz = loader.findClass(x.getAbsolutePath());
 
-            Class<?>[] ints = clazz.getInterfaces();
+            Class<?>[] ints = clazz.getInterfaces(); // массив интерфейсорв
            // String pack = clazz.getPackageName();
            // String interfaceName = pack.substring(0, pack.length()-4)+"Animal";
 
 
             if(ints.length!=0) {
                 for (Class<?> c : ints) {
-                    if( c ==Animal.class){
+                    if( c ==Animal.class){//проходим по массиву - если есть поддержка нужного интерфеса
                         //System.out.println(clazz.getName()+ " поддерживает интерфейс "+c.getName());
                         try{
 
-                            Constructor[] constructors = clazz.getConstructors();
+                            Constructor[] constructors = clazz.getConstructors();//получаем конструкторы
                             for (Constructor<?> cst :constructors){
-                                if(cst.getParameters().length==0){
+                                if(cst.getParameters().length==0){//если есть без параметров то создаем инстанс
                                     result.add( (Animal) clazz.newInstance()  );
                                 }
                             }
@@ -75,19 +75,13 @@ public class Sol {
         String classname = "/home/nikolay/IdeaProjects/JavarushLearning/out/production/JavarushLearning/my/learning/javarush/st3/generiks/data/Cat.class";
         String classname1 = "C:\\Users\\VeselovND\\git\\JavarushLearning\\src\\my\\learning\\javarush\\st3\\generiks\\data\\Cat.class";
 
-
-
-
-
-
-
         return result;
     }
 
 
 
 }
-class ModuleLoader extends ClassLoader{
+class ModuleLoader extends ClassLoader{// создаем новый загрузчик наследуемся от Класс Лоадер
     private String path;
     public ModuleLoader(String path){
         super();
@@ -98,11 +92,11 @@ class ModuleLoader extends ClassLoader{
         try{
             byte[] b = fetchClassFS(name);
             //System.out.println(b.length);
-            return defineClass(null,b,0, b.length);
+            return defineClass(null,b,0, b.length);// тут передаем в класснейм нулл т.к. не знаем точно какой класс нам надо вернуть
         }
         catch (IOException e) {
             e.printStackTrace();
-        }
+        }// в итоге вернули дженерик класс
         return null;
     }
 
@@ -125,6 +119,7 @@ class ModuleLoader extends ClassLoader{
         is.close();
         return byteArr;
 
-    }
+    }// этот метод преобразуется в массив
+    //байтов файл чтобы передаваеть его потом в метод определить класс
 }
 
