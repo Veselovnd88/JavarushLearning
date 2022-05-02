@@ -1,8 +1,5 @@
 package my.learning.javarush.st3.lists;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.AbstractList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,26 +16,36 @@ public class findList {
         for (Class s : intfcs) {
             if (List.class.isAssignableFrom(s)) {//метод проверяет реализуют интерфейс илст или нет
 
-                System.out.println("реализуют Лист");
-                System.out.println(s.getName());
+                //System.out.println("реализуют Лист");
+                //System.out.println(s.getName());
                 if (Modifier.isPrivate(s.getModifiers()) && Modifier.isStatic(s.getModifiers())) {//проверка модификаторов
-                    if (s.getDeclaredMethod("get", int.class) != null) {
-                        Constructor cst = s.getConstructor();
-                        cst.setAccessible(true);
-                        try {
-                            List obj = (List) cst.newInstance();
-                            obj.get(0);
 
+                    Method gt = s.getDeclaredMethod("get",int.class);
+                    //System.out.println(gt.getName());
+                    try {
+                        Constructor[] constructors = s.getDeclaredConstructors();
+                        for(Constructor c:constructors){
+                            Parameter[] params = c.getParameters();
+                            if(params.length==0){
+                                c.setAccessible(true);
+                             //   System.out.println("Констрруктор без параметров");
+                                List inst = (List) c.newInstance();
+                                inst.get(0);
 
-                        } catch (InvocationTargetException e) {
-                            if (e.getCause().toString().contains("IndexOutOfBoundsException")) {
-                                return s.getClass();
                             }
+                            //System.out.println(c.getName());
                         }
-                        throw new RuntimeException();
+
+                    } catch (IndexOutOfBoundsException e) {
+                        //e.getCause().toString().contains("IndexOutOfBoundsException");
+                        System.out.println("вот мой класс"+ s.getName());
+                        return  s;
+                        //e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
                     }
                 }
-            }
+            }}
 
 
             return null;
