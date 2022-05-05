@@ -35,41 +35,48 @@ public class RedBlackTree {
         current = grand = parent = header; // текущий равен корню
         EMPTY.element = item;//пустой элемент равен нашему новому
         while (current.element != item) { // до тех пор пока каррент не будет равен айтему
+            //так как любой лист - это ссылка на епмти, а мы в эпти присвоили айтем
             great = grand;
             grand = parent;
             parent = current;//парент = каррент
             current = item > current.element ? current.right : current.left;
-            //у каррента
+            //у каррента в каррент присваивается значение ребенка - левое или правое
+            //в любом случае выйдет что каррент.элемент будет равен - айтему
+            //а каннерт  = емпти
             if (current.left.color == Color.RED && current.right.color == Color.RED) {
                 reorient(item); //если левый -красный
             }
         }
         // current = item
 
-        if (current != EMPTY) {
+        if (current != EMPTY) {// если карент не равен эмпти - значит
+            //айтем есть где то ранее чем мы дошли до низа
             return;
         }
 
         current = new Node(item, EMPTY, EMPTY);
-
-        if (item < parent.element) {
+        //создаем в карент - новую ноду с пустыми листьями
+        if (item < parent.element) {// если вставляемое меньше родительского
+            //значит будет левым листом, иначе - правым( правило - слева меньше, справа больше
             parent.left = current;
         } else {
             parent.right = current;
         }
-
-        reorient(item);
+//вот мы вставили черную ноду
+        reorient(item);// и реориентирование
+        //
     }
 
     protected void reorient(int item) {
-        current.color = Color.RED;
-        current.left.color = Color.BLACK;
+        current.color = Color.RED;//ставим цвет в красный
+        current.left.color = Color.BLACK; //листья в черный
         current.right.color = Color.BLACK;
 
-        if (parent.color == Color.RED) {
-            grand.color = Color.RED;
+        if (parent.color == Color.RED) { // если родительский красный
+            grand.color = Color.RED;//
             if (item < grand.element != item < parent.element) {
-                parent = rotate(item, grand);
+                //если айтем меньше гранд элем и не меньше парента
+                parent = rotate(item, grand);//поворот
             }
             current = rotate(item, great);
             current.color = Color.BLACK;
@@ -78,11 +85,12 @@ public class RedBlackTree {
         header.right.color = Color.BLACK;
     }
 
-    private Node rotate(int item, Node parent) {
-        if (item < parent.element) {
-            Node node = parent.left;
+    private Node rotate(int item, Node parent) {//принимает наш элемент и родителя
+        if (item < parent.element) {// если меньше родителя
+            Node node = parent.left; //нода = левая
+            //ЕСли айтем меньше левого элемента родителя - вращаем налево, иначе направо
             Node resultNode = item < node.element ? rotateWithLeftNode(node) : rotateWithRightNode(node);
-            parent.left = resultNode;
+            parent.left = resultNode;//левая нода присваивается результат
             return parent.left;
         } else {
             Node node = parent.right;
@@ -93,17 +101,17 @@ public class RedBlackTree {
     }
 
     private Node rotateWithLeftNode(Node element) {
-        Node left = element.left;
-        element.left = left.right;
-        left.right = element;
+        Node left = element.left; //левая = промежуточная (главная - левая
+        element.left = left.right;// левый ребенок элем = станет правым
+        left.right = element;// а правый станет элементо
         return left;
     }
 
-    private Node rotateWithRightNode(Node element) { //#TODO
-        Node left = element.left;
-        element.left = left.right;
-        left.right = element;
-        return left;
+    private Node rotateWithRightNode(Node element) { //то же самое - гл - правая
+        Node right = element.right;
+        element.right = right.left;//правый элем - левый
+        right.left = element; //левый элем - элем
+        return right;
     }
     public void getRedBlackTree(){
         System.out.println(grand);
