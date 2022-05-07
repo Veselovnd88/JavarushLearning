@@ -22,18 +22,33 @@ public class SocialNetwork {
     }
 
     public Set<Integer> getAllFriendsAndPotentialFriends(int index, int deep) {
-        /*если индекс 1, то ищем всех друзей у индекса, что нам надо сделать, пройти по всем элементам этой строки
-        и определить какие из них тру, кроме самого индекса
-        * */
+        /*если глубина 1, нужно пройти по всем индексам кроме заданного и выяснить у кого в друзьях есть этот индекс
+        *в цикле, для каждого человека я проверяю дружит ли он с заданным и составляю сет
+        *  */
         HashSet<Integer> mySet = new HashSet<>();
-        System.out.println("Проверяем строку "+ index+" "+ Arrays.toString(humanRelationships[index]));
-        for(int i=0; i<humanRelationships[index].length-1;i++){
-            if(humanRelationships[index][i]){
-                mySet.add(i);
-        }
 
-    }System.out.println(mySet);
-        return null;
+        //сформировали первую глубину - сет
+        for (int i=0; i<humanRelationships.length;i++){
+            if(i<index && index<humanRelationships.length&&humanRelationships[index][i]){
+                System.out.println("Проверяем строку "+ i+" "+ Arrays.toString(humanRelationships[i]));
+                mySet.add(i);
+            }
+            else if( i>index && humanRelationships[i][index]){
+                System.out.println("Проверяем строку "+ i+" "+ Arrays.toString(humanRelationships[i]));
+                mySet.add(i);
+            }
+        }
+        if (deep<=1){
+            //System.out.println(mySet);
+            return mySet;
+        }
+        else {
+
+            for(Object i: mySet.toArray()){
+                mySet.addAll(getAllFriendsAndPotentialFriends((Integer) i, deep-1));}
+            }
+        mySet.remove(index);
+        return mySet;
     }
 
     // Remove from the set the people with whom you already have a relationship
