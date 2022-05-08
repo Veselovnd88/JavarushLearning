@@ -5,8 +5,10 @@ import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class LoaderAndReflection {
     private List<Class> hiddenClasses = new ArrayList<>();
@@ -30,7 +32,7 @@ public class LoaderAndReflection {
     public void scanFileSystem() throws ClassNotFoundException {
         //заполняет поле hiddenClasses
 
-        myLoader myLoad = new myLoader();
+
         ArrayList<File> clazzes = new ArrayList<>();//лист для всех файлов классов
         File path = new File(packageName);
         for(File f: path.listFiles()){//для каждого файла из директории
@@ -39,21 +41,27 @@ public class LoaderAndReflection {
             }
             //System.out.println(clazzes);
         }
-
+        //System.out.println(clazzes.size());
+        myLoader myLoad = new myLoader();
         clazzes.forEach(x->{
-            System.out.println("Ищем класс по ссылке");
-            System.out.println(x.getAbsolutePath());
+
+            //System.out.println("Ищем класс по ссылке");
+            //System.out.println(x.getAbsolutePath());
             Class<?> clazz = myLoad.findClass(x.getAbsolutePath());
             Class[] interfaces = clazz.getInterfaces();
-            for( Class c: interfaces){
-                if(c==HiddenClass.class){
 
-                    Constructor[] constructors = c.getConstructors();
-                    for(Constructor co: constructors){
-                        if(co.getParameters().length==0){
+            for( Class c: interfaces){
+                System.out.println(c.getName());
+                if(c==HiddenClass.class){
+                    //System.out.println("сюда попадает?");
+                    Constructor[] constructors = clazz.getConstructors();
+                    for( Constructor constructor: constructors){
+                        if(constructor.getParameters().length==0){
                             hiddenClasses.add(clazz);
                         }
                     }
+
+
                 }
             }
         });
@@ -63,6 +71,27 @@ public class LoaderAndReflection {
 
 
     public HiddenClass getHiddenClassObjectByKey(String key) {
+        for (Class cl: hiddenClasses){
+            if(cl.getSimpleName().toLowerCase(Locale.ROOT).startsWith(key.toLowerCase())){
+                Constructor constructor = null;
+                try {
+                    constructor = cl.getConstructor(cl.getClass());
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    HiddenClass hc = (HiddenClass) constructor.newInstance();
+                    return hc;
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
         return null;
     }
     public class myLoader extends ClassLoader{
@@ -74,7 +103,7 @@ public class LoaderAndReflection {
         public Class<?> findClass(String name) {
             try{
                 byte[] bytes = fetchClassFS(name);
-                Class<?> clazz = defineClass(null, 0, bytes.length);
+                Class<?> clazz = defineClass(null,bytes, 0, bytes.length);
                 return clazz;
             } catch (IOException e) {
                 e.printStackTrace();
