@@ -1,14 +1,13 @@
 package my.learning.javarush.st3.classloadreadnreflection;
 
-import my.learning.javarush.st2.serialization.FindErrorTask;
-import org.w3c.dom.ls.LSOutput;
+
 
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
 
 public class LoaderAndReflection {
     private List<Class> hiddenClasses = new ArrayList<>();
@@ -51,7 +50,7 @@ public class LoaderAndReflection {
             Class[] interfaces = clazz.getInterfaces();
 
             for( Class c: interfaces){
-                System.out.println(c.getName());
+               //System.out.println(c.getName());
                 if(c==HiddenClass.class){
                     //System.out.println("сюда попадает?");
                     Constructor[] constructors = clazz.getConstructors();
@@ -65,30 +64,34 @@ public class LoaderAndReflection {
                 }
             }
         });
-        System.out.println(hiddenClasses);
+         System.out.println(hiddenClasses);
     }
 
 
 
     public HiddenClass getHiddenClassObjectByKey(String key) {
         for (Class cl: hiddenClasses){
-            if(cl.getSimpleName().toLowerCase(Locale.ROOT).startsWith(key.toLowerCase())){
-                Constructor constructor = null;
+            if(cl.getSimpleName().toLowerCase().startsWith(key.toLowerCase())){
                 try {
-                    constructor = cl.getConstructor(cl.getClass());
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-                try {
+
+
+                    System.out.println("зашел");
+                    System.out.println("делаю экземпляр для "+ cl.getSimpleName());
+                    Constructor<?> constructor = cl.getDeclaredConstructor();
+                    constructor.setAccessible(true);
                     HiddenClass hc = (HiddenClass) constructor.newInstance();
                     return hc;
-                } catch (InstantiationException e) {
+                }
+                catch (InstantiationException e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
                 }
+
 
             }
         }
@@ -109,7 +112,7 @@ public class LoaderAndReflection {
                 e.printStackTrace();
             }return null;
         }
-        private static byte[] fetchClassFS(String path) throws IOException {
+        private byte[] fetchClassFS(String path) throws IOException {
             InputStream is = new FileInputStream(new File(path)); //входящий поток
             long length = new File(path).length();// длина файла
             if(length>Integer.MAX_VALUE){
