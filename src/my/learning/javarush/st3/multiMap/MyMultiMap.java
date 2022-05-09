@@ -1,36 +1,34 @@
 package my.learning.javarush.st3.multiMap;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MyMultiMap <K,V> extends HashMap<K,V> implements Serializable, Cloneable {
     private int repeatCount;
-    private HashMap<K, List<V>> myMap;
+    private HashMap<K, List<V>> map;
 
     public MyMultiMap (int repeatCount){
         this.repeatCount = repeatCount;
-        this.myMap = new HashMap<K,List<V>>();
+        this.map = new HashMap<K,List<V>>();
     }
     @Override
     public V put(K key, V value) {
         V returnValue = null;
-        if(myMap.containsKey(key)){
-            returnValue = myMap.get(key).get(myMap.get(key).size()-1);
+        if(map.containsKey(key)){
+            returnValue = map.get(key).get(map.get(key).size()-1);
             //System.out.println(myMap.get(key));
-            if(myMap.get(key).size()<repeatCount){
-               List<V> tempList =  myMap.get(key);
+            if(map.get(key).size()<repeatCount){
+               List<V> tempList =  map.get(key);
                tempList.add(value);
-               myMap.put(key,tempList);
+               map.put(key,tempList);
                 //return returnValue;
             }
-            else if(myMap.get(key).size()==repeatCount){
-                List<V> tempList = myMap.get(key);
+            else if(map.get(key).size()==repeatCount){
+                List<V> tempList = map.get(key);
                 tempList.remove(0);
                 tempList.add(value);
-                myMap.put(key,tempList);
+                map.put(key,tempList);
                 //return returnValue;
             }
         }
@@ -38,17 +36,66 @@ public class MyMultiMap <K,V> extends HashMap<K,V> implements Serializable, Clon
             //V returnValue = null;
             List<V> myList = new ArrayList<>();
             myList.add(value);
-            myMap.put(key, myList);
+            map.put(key, myList);
             //System.out.println(myMap);
             //return null;
         }
         return returnValue;
     }
 
+
+    @Override
+    public V remove(Object key) {
+        V returnValue = null;
+        if( map.get(key)==null){
+            returnValue =null;
+        }
+        else {
+            List<V> tempList = map.get(key);
+            returnValue = tempList.get(0);
+            tempList.remove(0);
+            if(tempList.size()==0){
+                map.remove(key);
+                return returnValue;
+            }
+            map.put((K) key,tempList);
+        }
+        return returnValue;
+    }
+    @Override
+    public Set<K> keySet() {
+        return map.keySet();
+    }
+    @Override
+    public Collection<V> values() {
+        List<V> allVals = new ArrayList<>();
+
+        map.keySet().forEach(x->{
+            map.get(x).forEach(v->{allVals.add(v);
+            });
+            });
+
+        return allVals;
+    }
+    @Override
+    public boolean containsKey(Object key) {
+        return map.containsKey(key);
+    }
+    @Override
+    public boolean containsValue(Object value) {
+        AtomicBoolean bool = new AtomicBoolean(false);
+        map.keySet().forEach(x->{
+            if(map.get(x).contains(value)){
+                bool.set(true);
+            }
+        });
+        return bool.get();
+    }
+
     @Override
     public int size() {
         int count = 0;
-        for(List<V> l: myMap.values()){
+        for(List<V> l: map.values()){
             count+=l.size();
         }
         return count;
@@ -56,7 +103,7 @@ public class MyMultiMap <K,V> extends HashMap<K,V> implements Serializable, Clon
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("{");
-        for (Map.Entry<K, List<V>> entry : myMap.entrySet()) {
+        for (Map.Entry<K, List<V>> entry : map.entrySet()) {
             sb.append(entry.getKey());
             sb.append("=");
             for (V v : entry.getValue()) {
