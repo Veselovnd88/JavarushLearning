@@ -39,7 +39,18 @@ public class Solution {
         Long start = new Date().getTime();
         Set<Long> ids = getIds(shortener,allStrings);
         Long finish = new Date().getTime();
-        System.out.println("getIds отработал за "+ (finish-start));
+        System.out.println("getIds отработал за "+ (finish-start)+ " мс");
+        Long start2 = new Date().getTime();
+        Set<String> string2 = getStrings(shortener,ids);
+        Long finish2 = new Date().getTime();
+        System.out.println("getStrings отработал за "+ (finish2-start2)+" мс");
+        if(allStrings.size()==string2.size()){
+            System.out.println("Тест пройден.");
+        }
+        else{
+            System.out.println("Тест не пройден");
+        }
+
 
 
     }
