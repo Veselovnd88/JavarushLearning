@@ -1,8 +1,6 @@
 package my.learning.javarush.st3.shortener;
 
-import my.learning.javarush.st3.shortener.strategy.HashMapStorageStrategy;
-import my.learning.javarush.st3.shortener.strategy.OurHashMapStorageStrategy;
-import my.learning.javarush.st3.shortener.strategy.StorageStrategy;
+import my.learning.javarush.st3.shortener.strategy.*;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -14,7 +12,12 @@ public class Solution {
     testStrategy(myStrategy,10000);
     StorageStrategy myStrategy2 = new OurHashMapStorageStrategy();
     testStrategy(myStrategy2,10000);
-
+    Entry e = new Entry(100,100l,"test",null);
+        System.out.println(e.getKey());
+    FileBucket fb = new FileBucket();
+    fb.putEntry(e);
+    Entry got = fb.getEntry();
+    System.out.println(e.equals(got));
 
     }
 
