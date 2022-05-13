@@ -1,6 +1,7 @@
 package my.learning.javarush.st3.shortener;
 
 import my.learning.javarush.st3.shortener.strategy.HashMapStorageStrategy;
+import my.learning.javarush.st3.shortener.strategy.OurHashMapStorageStrategy;
 import my.learning.javarush.st3.shortener.strategy.StorageStrategy;
 
 import java.util.Date;
@@ -11,6 +12,8 @@ public class Solution {
     public static void main(String[] args) {
     StorageStrategy myStrategy = new HashMapStorageStrategy();
     testStrategy(myStrategy,10000);
+    StorageStrategy myStrategy2 = new OurHashMapStorageStrategy();
+    testStrategy(myStrategy2,10000);
 
 
     }

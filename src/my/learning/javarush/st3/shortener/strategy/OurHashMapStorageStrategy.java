@@ -78,21 +78,49 @@ public class OurHashMapStorageStrategy implements  StorageStrategy{
 
     @Override
     public boolean containsValue(String value) {
+        for (Entry e:table){
+            while(e!=null){
+                if(e.value.equals(value)){
+                    return true;
+                } else{
+                    e = e.next;
+                }
+            }
+        }
         return false;
     }
 
     @Override
     public void put(Long key, String value) {
-
+        int hash = hash(key);// рассчитали хеш для ключа
+        int index = indexFor(hash, table.length);//определили куда вставщять
+        for (Entry e = table[index]; e != null; e = e.next) {//идем по всем ключам, если находим такой же - то обновляем
+            if (key.equals(e.key)) {
+                e.value = value;
+                return;
+            }
+        }
+        addEntry(hash, key, value, index);// если нет - до добавляем
     }
 
     @Override
     public Long getKey(String string) {
+        for(Entry e: table){
+            for(Entry elem = e; elem!=null; elem = e.next){
+                if(e.value.equals(string)){
+                    return e.key;
+                }
+            }
+        }
         return null;
     }
 
     @Override
     public String getValue(Long key) {
+        Entry entry = getEntry(key);// взяли ентри
+        if (entry != null)
+            return entry.getValue();
+
         return null;
     }
 }
