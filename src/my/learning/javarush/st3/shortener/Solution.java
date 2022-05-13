@@ -16,6 +16,7 @@ public class Solution {
         System.out.println(e.getKey());
     FileBucket fb = new FileBucket();
     fb.putEntry(e);
+        System.out.println(fb.getFileSize());
     Entry got = fb.getEntry();
     System.out.println(e.equals(got));
 

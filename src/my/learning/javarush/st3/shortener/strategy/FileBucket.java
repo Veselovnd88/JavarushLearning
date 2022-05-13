@@ -42,15 +42,17 @@ public class FileBucket {
 
     public Entry getEntry(){
         try {
-            if (Files.size(this.path)==0){
-                return null;
-            }
-            else{
+            if (getFileSize()>0){
+                //System.out.println("я тут");
+
                 InputStream is = Files.newInputStream(this.path);
                 ObjectInputStream ois = new ObjectInputStream(is);
                 Entry e = (Entry) ois.readObject();
                 return e;
             }
+             return null;
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
