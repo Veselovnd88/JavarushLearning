@@ -44,9 +44,8 @@ public class FileBucket {
         try {
             if (getFileSize()>0){
                 //System.out.println("я тут");
-
-                InputStream is = Files.newInputStream(this.path);
-                ObjectInputStream ois = new ObjectInputStream(is);
+                //InputStream is = Files.newInputStream(this.path);
+                ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(this.path));
                 Entry e = (Entry) ois.readObject();
                 return e;
             }
