@@ -4,13 +4,15 @@ import java.io.File;
 
 public class FileStorageStrategy implements StorageStrategy{
     private FileBucket[] table = new FileBucket[DEFAULT_INITIAL_CAPACITY];
-    private Long bucketSizeLimit = 10000l;
+    private long bucketSizeLimit = DEFAULT_BUCKET_SIZE_LIMIT;
     static final int DEFAULT_INITIAL_CAPACITY = 16;// начальная величина
-    static final float DEFAULT_LOAD_FACTOR = 0.75f;
-
+    //static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    static final long DEFAULT_BUCKET_SIZE_LIMIT = 10000l;
     int size;
-    int threshold = (int) (DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR);
-    float loadFactor = DEFAULT_LOAD_FACTOR;
+    private long maxBucketSize;
+
+    //int threshold = (int) (DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR);
+   // float loadFactor = DEFAULT_LOAD_FACTOR;
     public Long getBucketSizeLimit() {
         return bucketSizeLimit;
     }
@@ -64,16 +66,30 @@ public class FileStorageStrategy implements StorageStrategy{
         }
     }
 
-    public void addEntry(int hash, Long key, String value, int bucketIndex){
-        Entry e = table[bucketIndex];// ентри - забираем из текущей таблицы
-        table[bucketIndex] = new Entry(hash, key, value, e);// создали ентри с параметрами - хеш, ключ, следующий, новый поставили перед текущим
-        if (table[bucketIndex].getFileSize() >= getBucketSizeLimit())// увеличили размер, если он ббольше границы - то делаем ресайз в 2 раза больше
+    void addEntry(int hash, Long key, String value, int bucketIndex) {
+        FileBucket fb = table[bucketIndex];
+        if(fb!=null){
+        if ( fb.getFileSize()>= bucketSizeLimit){
             resize(2 * table.length);
+            hash = hash(key);
+            bucketIndex = indexFor(hash, table.length);
+        }}
+
+        createEntry(hash, key, value, bucketIndex);
     }
     public void createEntry(int hash, Long key, String value, int bucketIndex){// тоже самое что и добавить ентри но без проверки ресайза
-        Entry e = table[bucketIndex];
-        table[bucketIndex] = new Entry(hash, key, value, e);
-        size++;
+        FileBucket fb = table[bucketIndex];//взяли наш бакет
+        if(fb!=null){
+        Entry e = fb.getEntry();// выьтащили из него ентри
+        fb.putEntry(new Entry(hash, key, value, e));// положили туда новое ентри со next = тот которые только что вытазили
+        table[bucketIndex] = fb;// положили бакет обратно в таблицу
+        size++;//увеличили размер
+    }   else{
+            FileBucket newFb = new FileBucket();
+            newFb.putEntry(new Entry(hash,key,value,null));
+            table[bucketIndex] = newFb;
+            size++;
+        }
     }
 
 
@@ -84,7 +100,10 @@ public class FileStorageStrategy implements StorageStrategy{
 
     @Override
     public boolean containsValue(String value) {
-        for (Entry e:table){
+        for(FileBucket fb: table){
+            if( fb!=null){
+            Entry e = fb.getEntry();
+
             while(e!=null){
                 if(e.value.equals(value)){
                     return true;
@@ -92,7 +111,7 @@ public class FileStorageStrategy implements StorageStrategy{
                     e = e.next;
                 }
             }
-        }
+        }}
         return false;
     }
 
@@ -100,18 +119,21 @@ public class FileStorageStrategy implements StorageStrategy{
     public void put(Long key, String value) {
         int hash = hash(key);// рассчитали хеш для ключа
         int index = indexFor(hash, table.length);//определили куда вставщять
-        for (Entry e = table[index]; e != null; e = e.next) {//идем по всем ключам, если находим такой же - то обновляем
+        FileBucket fb = table[index];
+        if( fb!=null){
+        for (Entry e = table[index].getEntry(); e != null; e = e.next) {//идем по всем ключам, если находим такой же - то обновляем
             if (key.equals(e.key)) {
                 e.value = value;
                 return;
             }
-        }
+        }}
         addEntry(hash, key, value, index);// если нет - до добавляем
     }
 
     @Override
     public Long getKey(String string) {
-        for(Entry e: table){
+        for (FileBucket fb: table){
+            Entry e = fb.getEntry();
             for(Entry elem = e; elem!=null; elem = e.next){
                 if(e.value.equals(string)){
                     return e.key;

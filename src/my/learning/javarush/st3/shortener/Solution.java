@@ -12,13 +12,10 @@ public class Solution {
     testStrategy(myStrategy,10000);
     StorageStrategy myStrategy2 = new OurHashMapStorageStrategy();
     testStrategy(myStrategy2,10000);
-    Entry e = new Entry(100,100l,"test",null);
-        System.out.println(e.getKey());
-    FileBucket fb = new FileBucket();
-    fb.putEntry(e);
-        System.out.println(fb.getFileSize());
-    Entry got = fb.getEntry();
-    System.out.println(e.equals(got));
+
+    StorageStrategy myStrategyFiles = new FileStorageStrategy();
+    testStrategy(myStrategyFiles,100);
+
 
     }
 
