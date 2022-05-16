@@ -133,13 +133,14 @@ public class FileStorageStrategy implements StorageStrategy{
     @Override
     public Long getKey(String string) {
         for (FileBucket fb: table){
+            if(fb!=null){
             Entry e = fb.getEntry();
             for(Entry elem = e; elem!=null; elem = e.next){
                 if(e.value.equals(string)){
                     return e.key;
                 }
             }
-        }
+        }}
         return null;
     }
 

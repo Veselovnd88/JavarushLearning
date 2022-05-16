@@ -52,6 +52,8 @@
     <orderEntry type="library" name="slf4j.log4j12" level="project" />
     <orderEntry type="library" name="slf4j.api1" level="project" />
     <orderEntry type="library" name="guava-19.0" level="project" />
+    <orderEntry type="library" name="hamcrest.core" level="project" />
     <orderEntry type="library" name="commons-collections4-4.0" level="project" />
+    <orderEntry type="library" name="google.guava" level="project" />
   </component>
 </module>
