@@ -16,7 +16,13 @@ public class Solution {
     StorageStrategy myStrategyFiles = new FileStorageStrategy();
     testStrategy(myStrategyFiles,100);
 
+    StorageStrategy myStrategyBiMap = new OurHashBiMapStorageStrategy();
+    testStrategy(myStrategyBiMap,10000);
+    StorageStrategy myStrategyHashBiMap = new HashBiMapStorageStrategy();
+    testStrategy(myStrategyHashBiMap, 10000);
 
+    StorageStrategy biDiMap = new DualHashBidiMapStorageStrategy();
+    testStrategy(biDiMap,10000);
     }
 
     public static Set<Long> getIds(Shortener shortener, Set<String> strings){
