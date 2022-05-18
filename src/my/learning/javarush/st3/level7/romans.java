@@ -24,10 +24,12 @@ public class romans {
         table.put('m',1000);
         int result = 0;
         String lowerString = s.toLowerCase();
+        //System.out.println(lowerString);
         for (int j=0; j<lowerString.length()-1; j++){
             Character ch = lowerString.charAt(j);
+          //  System.out.println(ch);
             Character next = lowerString.charAt(j+1);
-            if(table.get(j)<table.get(next)){
+            if(table.get(ch)<table.get(next)){
                 result-=table.get(ch);
             }
             else{
