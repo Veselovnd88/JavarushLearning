@@ -2,14 +2,14 @@ package my.learning.javarush.st3.logparsertask;
 
 import java.util.Date;
 
-public class Log {
+public class MyLog {
     private String ip;
     private String userName;
     private Date date;
     private Event event;
     private Status status;
 
-    public Log(String ip, String userName, Date date, Event event, Status status) {
+    public MyLog(String ip, String userName, Date date, Event event, Status status) {
         this.ip = ip;
         this.userName = userName;
         this.date = date;
@@ -35,5 +35,25 @@ public class Log {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }
