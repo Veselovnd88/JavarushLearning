@@ -16,11 +16,13 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class LogParser implements IPQuery {
-
+    private HashMap<String, List<MyLog>> ipLog = new HashMap<>();
+    private HashMap<Date,List<MyLog>> dateLog = new HashMap<>();
     private List<MyLog> logList = new ArrayList<>();
     private Path logDir;
     public LogParser(Path logDir){
         this.logDir = logDir;
+        parseLogs();
     }
 
     public Event chooseEvent(String s){
@@ -67,7 +69,7 @@ public class LogParser implements IPQuery {
         Date date = null;
         try {
             date = sdf.parse(parts[2]);
-         //   System.out.println(date);
+         //   Systema.out.println(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -109,36 +111,75 @@ public class LogParser implements IPQuery {
 
     }
 
-    @Override
-    public int getNumberOfUniqueIPs(Date after, Date before) {
-        int count = 0;
+    public void fillIpMap(){
         for(MyLog m: logList){
-            if(after==null){
-                if(m.getDate().before(before) || m.getDate().equals(before)){
-                    count++;
-                }
+            if(ipLog.get(m.getIp())==null){
+                List<MyLog> l = new ArrayList<>();
+                l.add(m);
+                ipLog.put(m.getIp(),l);
             }
-            else if( before==null){
-                if(m.getDate().after(after)|| m.getDate().equals(after)){
-                    count++;
-                }
-            }
-            else if(before==null && after==null){
-                return logList.size();
-            }
-            else {
-                if(m.getDate().before(after)&&m.getDate().after(before)){
-                    count++;
-                }
+            else{
+                List<MyLog> l = ipLog.get(m.getIp());
+                l.add(m);
+                ipLog.put(m.getIp(),l);
             }
         }
+    }
 
-        return count;
+    public void fillDateMap(){
+        for(MyLog m: logList){
+            if(dateLog.get(m.getDate())==null){
+                List<MyLog> l = new ArrayList<>();
+                l.add(m);
+                dateLog.put(m.getDate(),l);
+            }
+            else{
+                List<MyLog> l = dateLog.get(m.getDate());
+                l.add(m);
+                dateLog.put(m.getDate(),l);
+            }
+        }
+    }
+    @Override
+    public int getNumberOfUniqueIPs(Date after, Date before) {
+        return getUniqueIPs(after,before).size();
     }
 
     @Override
     public Set<String> getUniqueIPs(Date after, Date before) {
-        return null;
+        Set<String> ipSet = new HashSet<>();
+        if(dateLog.size()==0){
+            fillDateMap();
+        }
+        for(Map.Entry<Date, List<MyLog>> entry: dateLog.entrySet()){
+            if(after==null){
+                if(entry.getKey().before(before) || entry.getKey().equals(before)){
+                    for(MyLog m: entry.getValue()){
+                        ipSet.add(m.getIp());
+                    }
+                }
+            }
+            else if( before==null){
+                if(entry.getKey().after(after)|| entry.getKey().equals(after)){
+                    for(MyLog m: entry.getValue()){
+                        ipSet.add(m.getIp());
+                    }
+            }
+            else if(before==null && after==null){
+                    for(MyLog m: entry.getValue()){
+                        ipSet.add(m.getIp());
+                    }
+            }
+            else {
+                if(entry.getKey().before(after)&&entry.getKey().after(before)){
+                    for(MyLog m: entry.getValue()){
+                        ipSet.add(m.getIp());
+                    }
+                }
+            }
+        }}
+
+        return ipSet;
     }
 
     @Override

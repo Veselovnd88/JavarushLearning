@@ -8,6 +8,7 @@ public class Solution {
         LogParser logParser = new LogParser(Paths.get("src/my/learning/javarush/st3/logparsertask/logs"));
         //logParser.parseLogs();
         System.out.println(logParser.getNumberOfUniqueIPs(null, new Date()));
+        System.out.println(logParser.getUniqueIPs(null, new Date()));
 
     }
 }
