@@ -151,49 +151,85 @@ public class LogParser implements IPQuery {
         if(dateLog.size()==0){
             fillDateMap();
         }
-        for(Map.Entry<Date, List<MyLog>> entry: dateLog.entrySet()){
-            if(after==null){
-                if(entry.getKey().before(before) || entry.getKey().equals(before)){
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
                     for(MyLog m: entry.getValue()){
                         ipSet.add(m.getIp());
                     }
                 }
-            }
-            else if( before==null){
-                if(entry.getKey().after(after)|| entry.getKey().equals(after)){
-                    for(MyLog m: entry.getValue()){
-                        ipSet.add(m.getIp());
-                    }
-            }
-            else if(before==null && after==null){
-                    for(MyLog m: entry.getValue()){
-                        ipSet.add(m.getIp());
-                    }
-            }
-            else {
-                if(entry.getKey().before(after)&&entry.getKey().after(before)){
-                    for(MyLog m: entry.getValue()){
-                        ipSet.add(m.getIp());
-                    }
-                }
-            }
-        }}
-
         return ipSet;
     }
-
+    public HashMap<Date, List<MyLog>> filterLogs(Date after, Date before){
+        HashMap<Date, List<MyLog>> filteredMap = new HashMap<>();
+        if (dateLog.size()==0){
+            fillDateMap();
+        }
+        for(Map.Entry<Date, List<MyLog>> entry: dateLog.entrySet()){
+            if(after==null&&before!=null){
+                if(entry.getKey().before(before) || entry.getKey().equals(before)){
+                    filteredMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+            else if(before==null&&after!=null){
+                //   System.out.println("Зашел");
+                if(entry.getKey().after(after)|| entry.getKey().equals(after)){
+                    filteredMap.put(entry.getKey(),entry.getValue());
+                }}
+            else if(before==null && after==null){
+               filteredMap.put(entry.getKey(),entry.getValue());
+            }
+            else  {
+                if(entry.getKey().before(before)&&entry.getKey().after(after)){
+                    filteredMap.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        return filteredMap;
+    }
     @Override
     public Set<String> getIPsForUser(String user, Date after, Date before) {
-        return null;
+        HashSet<String> ipsForUser = new HashSet<>();
+        if(dateLog.size()==0){
+            fillDateMap();
+        }
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+            for(MyLog m:entry.getValue()){
+                if(m.getUserName().equals(user)){
+                    ipsForUser.add(m.getIp());
+                }
+            }
+        }
+        return ipsForUser;
     }
 
     @Override
     public Set<String> getIPsForEvent(Event event, Date after, Date before) {
-        return null;
+        HashSet<String> ipsForEvent = new HashSet<>();
+        if(dateLog.size()==0){
+            fillDateMap();
+        }
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(m.getEvent()==event){
+                    ipsForEvent.add(m.getIp());
+                }
+            }
+        }
+        return ipsForEvent;
     }
 
     @Override
     public Set<String> getIPsForStatus(Status status, Date after, Date before) {
-        return null;
+        HashSet<String> ipsForStatus = new HashSet<>();
+        if(dateLog.size()==0){
+            fillDateMap();
+        }
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(m.getStatus()==status){
+                    ipsForStatus.add(m.getIp());
+                }
+            }
+        }
+        return ipsForStatus;
     }
 }
