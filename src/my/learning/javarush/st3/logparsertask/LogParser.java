@@ -2,6 +2,7 @@ package my.learning.javarush.st3.logparsertask;
 
 import com.ibm.jvm.Log;
 import my.learning.javarush.st3.logparsertask.query.IPQuery;
+import my.learning.javarush.st3.logparsertask.query.UserQuery;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -15,7 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class LogParser implements IPQuery {
+public class LogParser implements IPQuery, UserQuery {
     private HashMap<String, List<MyLog>> ipLog = new HashMap<>();
     private HashMap<Date,List<MyLog>> dateLog = new HashMap<>();
     private List<MyLog> logList = new ArrayList<>();
@@ -23,6 +24,7 @@ public class LogParser implements IPQuery {
     public LogParser(Path logDir){
         this.logDir = logDir;
         parseLogs();
+        fillDateMap();
     }
 
     public Event chooseEvent(String s){
@@ -231,5 +233,75 @@ public class LogParser implements IPQuery {
             }
         }
         return ipsForStatus;
+    }
+
+
+    @Override
+    public Set<String> getAllUsers() {
+        HashSet<String> users = new HashSet<>();
+        for(Map.Entry<Date, List<MyLog>> entry: dateLog.entrySet()){
+            for(MyLog m: entry.getValue()){
+                users.add(m.getUserName());
+            }
+        }
+        return users;
+    }
+
+    @Override
+    public int getNumberOfUsers(Date after, Date before) {
+
+        HashSet<String> users = new HashSet<>();
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                users.add(m.getUserName());
+            }
+        }
+        return users.size();
+    }
+
+    @Override
+    public int getNumberOfUserEvents(String user, Date after, Date before) {
+
+        return 0;
+    }
+
+    @Override
+    public Set<String> getUsersForIP(String ip, Date after, Date before) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getLoggedUsers(Date after, Date before) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getDownloadedPluginUsers(Date after, Date before) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getWroteMessageUsers(Date after, Date before) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getSolvedTaskUsers(Date after, Date before) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getSolvedTaskUsers(Date after, Date before, int task) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getDoneTaskUsers(Date after, Date before) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getDoneTaskUsers(Date after, Date before, int task) {
+        return null;
     }
 }
