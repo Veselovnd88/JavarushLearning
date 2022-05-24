@@ -63,7 +63,7 @@ public class LogParser implements IPQuery, UserQuery {
         else{return null;}
     }
     public MyLog parseLine(String line){
-        Task task = null;
+        int task_num = 0;
         String[] parts = line.split("\\t");
        // System.out.println(parts.length);
         String ip = parts[0];
@@ -80,13 +80,13 @@ public class LogParser implements IPQuery, UserQuery {
 
         Event event = chooseEvent(parts[3]);
         if(event == Event.SOLVE_TASK || event ==Event.DONE_TASK){
-            task = new Task(event, Integer.parseInt(parts[3].split(" ")[1]));
+            task_num =  Integer.parseInt(parts[3].split(" ")[1]);
         }
         //System.out.println(event);
         Status status = chooseStatus(parts[4]);
         System.out.println(status);
 
-        return new MyLog(ip,name,date, event,status,null);
+        return new MyLog(ip,name,date, event,status);
 
     }
     public void parseLogs(){
