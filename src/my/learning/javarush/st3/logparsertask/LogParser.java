@@ -364,7 +364,9 @@ public class LogParser implements IPQuery, UserQuery, DateQuery {
                             datesSet.add(entry.getKey());
                     }}
                     else {
-
+                        if(m.getUserName().equals(user)&&event.equals(m.getEvent())&&m.getTask_num()==task){
+                            datesSet.add(entry.getKey());
+                        }
                     }
                 }
                 else if(user==null&& event==null&&status!=null){
@@ -395,18 +397,23 @@ public class LogParser implements IPQuery, UserQuery, DateQuery {
     @Override
     public Date getDateWhenUserLoggedFirstTime(String user, Date after, Date before) {
         List<Date> dates = new ArrayList<>();
-        for(Date d: getDatesMethod(user,Event.LOGIN,-1,after,before,null)){
-            dates.add(d);
-        }
+        dates.addAll(getDatesMethod(user, Event.LOGIN, -1, after, before, null));
         if(dates.size()==0){
             return null;
         }
-        return dates.stream().sorted().collect(Collectors.toList()).get(0);
+        return dates.stream().sorted().toList().get(0);
     }
 
     @Override
     public Date getDateWhenUserSolvedTask(String user, int task, Date after, Date before) {
-        return null;
+        List<Date> dates = new ArrayList<>();
+        dates.addAll(getDatesMethod(user, Event.SOLVE_TASK, task, after, before, null));
+        if (dates.size()==0){
+            return null;
+        }
+        else{
+           return  dates.stream().sorted().toList().get(0);
+        }
     }
 
     @Override
