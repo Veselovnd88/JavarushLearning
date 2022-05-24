@@ -8,14 +8,16 @@ public class MyLog {
     private Date date;
     private Event event;
     private Status status;
+    private int task_num;
 
 
-    public MyLog(String ip, String userName, Date date, Event event,  Status status) {
+    public MyLog(String ip, String userName, Date date, Event event,  Status status, int task_num) {
         this.ip = ip;
         this.userName = userName;
         this.date = date;
         this.event = event;
         this.status = status;
+        this.task_num = task_num;
 
     }
 
@@ -59,5 +61,7 @@ public class MyLog {
         return status;
     }
 
-
+    public int getTask_num() {
+        return task_num;
+    }
 }

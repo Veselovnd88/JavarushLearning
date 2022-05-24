@@ -1,7 +1,6 @@
 package my.learning.javarush.st3.logparsertask;
 
-import com.ibm.jvm.Log;
-import my.learning.javarush.st2.BooksTask;
+import my.learning.javarush.st3.logparsertask.query.DateQuery;
 import my.learning.javarush.st3.logparsertask.query.IPQuery;
 import my.learning.javarush.st3.logparsertask.query.UserQuery;
 
@@ -16,8 +15,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class LogParser implements IPQuery, UserQuery {
+public class LogParser implements IPQuery, UserQuery, DateQuery {
     private HashMap<String, List<MyLog>> ipLog = new HashMap<>();
     private HashMap<Date,List<MyLog>> dateLog = new HashMap<>();
     private List<MyLog> logList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class LogParser implements IPQuery, UserQuery {
         Status status = chooseStatus(parts[4]);
         System.out.println(status);
 
-        return new MyLog(ip,name,date, event,status);
+        return new MyLog(ip,name,date, event,status,task_num);
 
     }
     public void parseLogs(){
@@ -289,19 +289,26 @@ public class LogParser implements IPQuery, UserQuery {
         }
         return users;
     }
-    public Set<String> getUserWithStatus(Event event, Date after, Date before, Status status){
+    private Set<String> getUserWithStatus(Event event, Date after, Date before, Status status, int task){
 
         HashSet<String> users = new HashSet<>();
         for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
             for(MyLog m: entry.getValue()){
-                if(status==null){
+                if(status==null&& task==-1){
                     if(m.getEvent() == event){
                         users.add(m.getUserName());
                 }
                 }
-                else{
+                else if (task==-1){
                     if(m.getEvent()==event && m.getStatus()==status){
                         users.add(m.getUserName());
+                    }
+                }
+                else {
+                    if(m.getEvent()==event){
+                        if(m.getTask_num()==task){
+                            users.add(m.getUserName());
+                        }
                     }
                 }
             }
@@ -311,36 +318,109 @@ public class LogParser implements IPQuery, UserQuery {
 
     @Override
     public Set<String> getLoggedUsers(Date after, Date before) {
-        return getUserWithStatus(Event.LOGIN, after,before,null);
+        return getUserWithStatus(Event.LOGIN, after,before,null,-1);
     }
 
     @Override
     public Set<String> getDownloadedPluginUsers(Date after, Date before) {
-        return getUserWithStatus(Event.DOWNLOAD_PLUGIN, after,before,Status.OK);
+        return getUserWithStatus(Event.DOWNLOAD_PLUGIN, after,before,Status.OK,-1);
     }
 
     @Override
     public Set<String> getWroteMessageUsers(Date after, Date before) {
-        return getUserWithStatus(Event.WRITE_MESSAGE, after,before, Status.OK);
+        return getUserWithStatus(Event.WRITE_MESSAGE, after,before, Status.OK,-1);
     }
 
     @Override
     public Set<String> getSolvedTaskUsers(Date after, Date before) {
-        return getUserWithStatus(Event.SOLVE_TASK, after,before,null);
+        return getUserWithStatus(Event.SOLVE_TASK, after,before,null,-1);
     }
 
     @Override
     public Set<String> getSolvedTaskUsers(Date after, Date before, int task) {
-        return null;
+        return getUserWithStatus(Event.SOLVE_TASK,after,before,null,task);
+
     }
 
     @Override
     public Set<String> getDoneTaskUsers(Date after, Date before) {
-        return null;
+        return getUserWithStatus(Event.DONE_TASK,after,before,null,-1);
     }
 
     @Override
     public Set<String> getDoneTaskUsers(Date after, Date before, int task) {
+        return getUserWithStatus(Event.DONE_TASK,after,before,null,task);
+    }
+
+
+
+    private Set<Date> getDatesMethod(String user, Event event,int task, Date after,Date before,Status status){
+        HashSet<Date> datesSet = new HashSet<>();
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(user!=null && event!=null &&status==null){
+                    if(task==-1){
+                        if(m.getUserName().equals(user)&& event.equals(m.getEvent())){
+                            datesSet.add(entry.getKey());
+                    }}
+                    else {
+
+                    }
+                }
+                else if(user==null&& event==null&&status!=null){
+                    if(m.getStatus().equals(status)){
+                        datesSet.add(entry.getKey());
+                    }
+                }
+
+            }
+        }
+        return datesSet;
+    }
+    @Override
+    public Set<Date> getDatesForUserAndEvent(String user, Event event, Date after, Date before) {
+        return getDatesMethod(user,event,-1,after,before,null);
+    }
+
+    @Override
+    public Set<Date> getDatesWhenSomethingFailed(Date after, Date before) {
+        return getDatesMethod(null,null,-1,after,before,Status.FAILED);
+    }
+
+    @Override
+    public Set<Date> getDatesWhenErrorHappened(Date after, Date before) {
+        return getDatesMethod(null,null,-1,after,before,Status.ERROR);
+    }
+
+    @Override
+    public Date getDateWhenUserLoggedFirstTime(String user, Date after, Date before) {
+        List<Date> dates = new ArrayList<>();
+        for(Date d: getDatesMethod(user,Event.LOGIN,-1,after,before,null)){
+            dates.add(d);
+        }
+        if(dates.size()==0){
+            return null;
+        }
+        return dates.stream().sorted().collect(Collectors.toList()).get(0);
+    }
+
+    @Override
+    public Date getDateWhenUserSolvedTask(String user, int task, Date after, Date before) {
+        return null;
+    }
+
+    @Override
+    public Date getDateWhenUserDoneTask(String user, int task, Date after, Date before) {
+        return null;
+    }
+
+    @Override
+    public Set<Date> getDatesWhenUserWroteMessage(String user, Date after, Date before) {
+        return null;
+    }
+
+    @Override
+    public Set<Date> getDatesWhenUserDownloadedPlugin(String user, Date after, Date before) {
         return null;
     }
 }
