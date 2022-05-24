@@ -8,13 +8,15 @@ public class MyLog {
     private Date date;
     private Event event;
     private Status status;
+    private Task task;
 
-    public MyLog(String ip, String userName, Date date, Event event, Status status) {
+    public MyLog(String ip, String userName, Date date, Event event,  Status status,Task task) {
         this.ip = ip;
         this.userName = userName;
         this.date = date;
         this.event = event;
         this.status = status;
+        this.task = task;
     }
 
     public void setIp(String ip) {
@@ -55,5 +57,9 @@ public class MyLog {
 
     public Status getStatus() {
         return status;
+    }
+
+    public Task getTask() {
+        return task;
     }
 }

@@ -20,6 +20,10 @@ public class Solution {
         System.out.println(logParser.getUniqueIPs(null, null));
         System.out.println(logParser.getIPsForUser("Vasya Pupkin", null,new Date()));
         System.out.println(logParser.getIPsForEvent(Event.LOGIN,null, new Date()));
+        System.out.println(logParser.getAllUsers());
+        System.out.println(logParser.getNumberOfUserEvents("Vasya Pupkin",null,null));
+        System.out.println(logParser.getUsersForIP("120.120.120.122", null, null));
+        System.out.println(logParser.getLoggedUsers(null, null));
 
     }
 }

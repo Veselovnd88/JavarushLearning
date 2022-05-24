@@ -1,6 +1,7 @@
 package my.learning.javarush.st3.logparsertask;
 
 import com.ibm.jvm.Log;
+import my.learning.javarush.st2.BooksTask;
 import my.learning.javarush.st3.logparsertask.query.IPQuery;
 import my.learning.javarush.st3.logparsertask.query.UserQuery;
 
@@ -62,6 +63,7 @@ public class LogParser implements IPQuery, UserQuery {
         else{return null;}
     }
     public MyLog parseLine(String line){
+        Task task = null;
         String[] parts = line.split("\\t");
        // System.out.println(parts.length);
         String ip = parts[0];
@@ -77,11 +79,14 @@ public class LogParser implements IPQuery, UserQuery {
         }
 
         Event event = chooseEvent(parts[3]);
+        if(event == Event.SOLVE_TASK || event ==Event.DONE_TASK){
+            task = new Task(event, Integer.parseInt(parts[3].split(" ")[1]));
+        }
         //System.out.println(event);
         Status status = chooseStatus(parts[4]);
-        //System.out.println(status);
+        System.out.println(status);
 
-        return new MyLog(ip,name,date, event,status);
+        return new MyLog(ip,name,date, event,status,null);
 
     }
     public void parseLogs(){
@@ -261,33 +266,67 @@ public class LogParser implements IPQuery, UserQuery {
 
     @Override
     public int getNumberOfUserEvents(String user, Date after, Date before) {
-
-        return 0;
+        HashSet<Event> events = new HashSet<>();
+        for(Map.Entry<Date,List<MyLog>> entry:filterLogs(after,before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(user.equals(m.getUserName())){
+                    events.add(m.getEvent());
+                }
+            }
+        }
+        return events.size();
     }
 
     @Override
     public Set<String> getUsersForIP(String ip, Date after, Date before) {
-        return null;
+        HashSet<String> users = new HashSet<>();
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(ip.equals(m.getIp())){
+                    users.add(m.getUserName());
+                }
+            }
+        }
+        return users;
+    }
+    public Set<String> getUserWithStatus(Event event, Date after, Date before, Status status){
+
+        HashSet<String> users = new HashSet<>();
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(status==null){
+                    if(m.getEvent() == event){
+                        users.add(m.getUserName());
+                }
+                }
+                else{
+                    if(m.getEvent()==event && m.getStatus()==status){
+                        users.add(m.getUserName());
+                    }
+                }
+            }
+        }
+        return users;
     }
 
     @Override
     public Set<String> getLoggedUsers(Date after, Date before) {
-        return null;
+        return getUserWithStatus(Event.LOGIN, after,before,null);
     }
 
     @Override
     public Set<String> getDownloadedPluginUsers(Date after, Date before) {
-        return null;
+        return getUserWithStatus(Event.DOWNLOAD_PLUGIN, after,before,Status.OK);
     }
 
     @Override
     public Set<String> getWroteMessageUsers(Date after, Date before) {
-        return null;
+        return getUserWithStatus(Event.WRITE_MESSAGE, after,before, Status.OK);
     }
 
     @Override
     public Set<String> getSolvedTaskUsers(Date after, Date before) {
-        return null;
+        return getUserWithStatus(Event.SOLVE_TASK, after,before,null);
     }
 
     @Override
