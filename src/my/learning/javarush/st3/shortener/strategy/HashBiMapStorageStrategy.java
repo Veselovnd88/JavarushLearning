@@ -1,3 +1,4 @@
+/*
 package my.learning.javarush.st3.shortener.strategy;
 
 import com.google.common.collect.HashBiMap;
@@ -30,3 +31,4 @@ public class HashBiMapStorageStrategy implements StorageStrategy{
         return data.get(key);
     }
 }
+*/

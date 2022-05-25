@@ -1,3 +1,4 @@
+/*
 package my.learning.javarush.st3.shortener;
 
 import my.learning.javarush.st3.shortener.strategy.*;
@@ -65,3 +66,4 @@ public class Solution {
 
     }
 }
+*/

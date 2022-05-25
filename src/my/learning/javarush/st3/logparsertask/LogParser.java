@@ -444,20 +444,20 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         Set<Event> eventSet = new HashSet<>();
         for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
             for(MyLog m: entry.getValue()){
-                if(user==null && event ==null && task==-1 && status==null && ip==null){
+                if(user==null && event ==null && task==-1 && status==null && ip==null){//все ивенты
                     eventSet.add(m.getEvent());
                 }
-                else if(user==null && event==null && task==-1 &&status ==null){
+                else if(user==null && event==null && task==-1 &&status ==null){//все ивенты с IP
                     if(m.getIp().equals(ip)){
                         eventSet.add(m.getEvent());
                     }
                 }
-                else if(user!=null&& ip==null && event==null && task==-1 &&status ==null){
+                else if(user!=null&& ip==null && event==null && task==-1 &&status ==null){//все ивенты с юзером
                     if(m.getUserName().equals(user)){
                         eventSet.add(m.getEvent());
                     }
                 }
-                else if(user == null && event == null && task == -1){
+                else if(user == null && event == null && task == -1){//все ивенты со статусом
                     if(m.getStatus().equals(status)){
                         eventSet.add(m.getEvent());
                     }
@@ -568,6 +568,44 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return task_qnt;
     }
 
+    private Set<Status> getStatusHelper(String user,String ip, Event event,int task, Date after,Date before,Status status){
+        Set<Status> statuses = new HashSet<>();
+        if(user==null &&ip==null&& event==null&&task==-1&&status==null){//Сбор всех уникальных статусов
+            for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+                for(MyLog m: entry.getValue()){
+                    statuses.add(m.getStatus());
+                }
+            }
+        }
+        else if(user==null && ip!=null &&event==null &&task==-1&&status==null){//проверка статусов по IP
+            for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+                for(MyLog m: entry.getValue()){
+                    if(m.getIp().equals(ip)){
+                        statuses.add(m.getStatus());
+                    }
+                }
+            }
+        }
+        else if(user!=null && ip==null &&event==null &&task==-1&&status==null){
+            for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+                for(MyLog m: entry.getValue()){
+                    if(m.getUserName().equals(user)){
+                        statuses.add(m.getStatus());
+                    }
+                }
+            }
+        }
+        else if(user==null && ip==null &&event!=null &&task==-1&&status==null){
+            for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+                for(MyLog m: entry.getValue()){
+                    if(m.getEvent().equals(event)){
+                        statuses.add(m.getStatus());
+                    }
+                }
+            }
+        }return statuses;
+    }
+
     @Override
     public Set<Object> execute(String query) {
         Set<? extends Object> mySet = new HashSet<>();
@@ -581,7 +619,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                 mySet = getUniqueIPs(null,null);}
                 else {
                     field = query.substring(query.indexOf("\"")).replace("\"","");
-                    System.out.println(field);
+                    //System.out.println(field);
                     switch(parts[3]){
                         case ("user"): {
                         //String user = query.substring(query.indexOf("\"")).replace("\"","");
@@ -621,8 +659,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                     System.out.println(field);
                     switch(parts[3]){
                         case ("ip"): {
-                            //String user = query.substring(query.indexOf("\"")).replace("\"","");
-                            //System.out.println(field);
                             mySet = getUsersForIP(field,null,null);
                             break;
                         }
@@ -631,7 +667,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                             Date date;
                             try {
                                 date = sdf.parse(field);
-                                //System.out.println(date);
                                 Set<String> s = new HashSet<>();
                                 for(Map.Entry<Date, List<MyLog>> entry: filterLogs(date,date).entrySet()){
                                     if(entry.getKey().equals(date)){
@@ -658,15 +693,13 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                 }
             break;
             case ("get date"):
-                if(f_query.length()==2){
-                mySet = dateLog.keySet();}
+                if(parts.length==2){
+                mySet = dateLog.keySet();
+                break;}
                 else {
                     field = query.substring(query.indexOf("\"")).replace("\"","");
-                    //System.out.println(field);
                     switch(parts[3]){
                         case ("ip"): {
-                            //String user = query.substring(query.indexOf("\"")).replace("\"","");
-                            //System.out.println(field);
                             Set<Date> s = new HashSet<>();
                             for(Map.Entry<Date,List<MyLog>> entry: dateLog.entrySet()){
                                 for(MyLog m: entry.getValue()){
@@ -692,17 +725,77 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                     }
                 }
             break;
-            case ("get event"): mySet = getAllEvents(null,null); break;
+            case ("get event"):
+                if(parts.length==2){
+                    mySet = getAllEvents(null,null); break;
+                }
+                else {
+                    field = query.substring(query.indexOf("\"")).replace("\"","");
+                    switch(parts[3]){
+                        case ("ip"): {
+                            mySet = getEventsForIP(field,null,null);
+                            break;
+                        }
+                        case ("user") :{
+                            mySet = getEventsForUser(field,null,null);
+                            break;
+                        }
+                        case ("date"):{
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+                            Date date;
+                            try {
+                                date = sdf.parse(field);
+                                mySet = getAllEvents(date,date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        }
+                        case("status"):{
+                            mySet = getEventMethod(null,null,null,-1,null,null,chooseStatus(field));
+                            break;
+                        }
+                    }
+                } break;
+
             case ("get status"):{
+                if(parts.length==2){
                 Set<Status> s = new HashSet<>();
                 for(Map.Entry<Date, List<MyLog>> entry: dateLog.entrySet()){
                     for(MyLog m: entry.getValue()){
                         s.add(m.getStatus());
                     }
-                } mySet = s; break;
+                } mySet = s; break;}
+                else {
+                    field = query.substring(query.indexOf("\"")).replace("\"","");
+                    switch(parts[3]){
+                        case ("ip"): {
+                            mySet = getStatusHelper(null,field,null,-1,null,null,null);
+                            break;
+                        }
+                        case ("user") :{
+                            mySet = getStatusHelper(field,null,null,-1,null,null,null);
+                            break;
+                        }
+                        case ("date"):{
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+                            Date date;
+                            try {
+                                date = sdf.parse(field);
+                                mySet = getStatusHelper(null,null,null,-1,date,date,null);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        }
+                        case("event"):{
+                            mySet = getStatusHelper(null,null,chooseEvent(field),-1,null,null,null);
+                            break;
+                        }
+                    }
+                }break;
             }
         }
-
         return (Set<Object>) mySet;
     }
 }

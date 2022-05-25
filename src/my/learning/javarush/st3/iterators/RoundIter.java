@@ -1,3 +1,4 @@
+/*
 package my.learning.javarush.st3.iterators;
 
 import my.learning.javarush.st3.shortener.Solution;
@@ -8,9 +9,11 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
+*/
 /*
 Круговой итератор
-*/
+*//*
+
 
 public class RoundIter<T> extends ArrayList<T> {
 
@@ -59,4 +62,4 @@ public class RoundIter<T> extends ArrayList<T> {
             RoundIter.super.iterator().remove();
         }
     }
-}
+}*/

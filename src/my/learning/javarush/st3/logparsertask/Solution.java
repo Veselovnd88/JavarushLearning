@@ -30,9 +30,10 @@ public class Solution {
         System.out.println(logParser.getNumberOfAttemptToSolveTask(18,null,null));
         System.out.println(logParser.getAllSolvedTasksAndTheirNumber(null,null));
         System.out.println(logParser.getEventsForUser("Vasya Pupkin", null, null));
-        System.out.println(logParser.execute("get date for user = \"Vasya Pupkin\""));
+        System.out.println(logParser.execute("get date"));
       //  System.out.println(logParser.execute("get ip for date = \"03.01.2014 03:45:23\""));
-        System.out.println(logParser.execute("get date for status = \"OK\""));
+        //System.out.println(logParser.execute("get event for status = \"OK\""));
+       //System.out.println(logParser.execute("get event for date = \"03.01.2014 03:45:23\""));
 
 
 
