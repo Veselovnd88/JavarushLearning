@@ -1,6 +1,7 @@
 package my.learning.javarush.st3.logparsertask;
 
 import my.learning.javarush.st3.logparsertask.query.DateQuery;
+import my.learning.javarush.st3.logparsertask.query.EventQuery;
 import my.learning.javarush.st3.logparsertask.query.IPQuery;
 import my.learning.javarush.st3.logparsertask.query.UserQuery;
 
@@ -17,7 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LogParser implements IPQuery, UserQuery, DateQuery {
+
+public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
     private HashMap<String, List<MyLog>> ipLog = new HashMap<>();
     private HashMap<Date,List<MyLog>> dateLog = new HashMap<>();
     private List<MyLog> logList = new ArrayList<>();
@@ -412,22 +414,160 @@ public class LogParser implements IPQuery, UserQuery, DateQuery {
             return null;
         }
         else{
-           return  dates.stream().sorted().toList().get(0);
+           return  //dates.stream().sorted().collect(Collectors.toList()).get(0);
+                   dates.stream().sorted().toList().get(0);
         }
     }
 
     @Override
     public Date getDateWhenUserDoneTask(String user, int task, Date after, Date before) {
-        return null;
+        List<Date> dates = new ArrayList<>();
+        dates.addAll(getDatesMethod(user, Event.DONE_TASK, task, after, before, null));
+        if (dates.size()==0){
+            return null;
+        }
+        else{
+            return  dates.stream().sorted().toList().get(0);
+        }
     }
 
     @Override
     public Set<Date> getDatesWhenUserWroteMessage(String user, Date after, Date before) {
-        return null;
+
+        return  getDatesMethod(user,Event.WRITE_MESSAGE,-1,after,before,null);
     }
 
     @Override
     public Set<Date> getDatesWhenUserDownloadedPlugin(String user, Date after, Date before) {
-        return null;
+        return  getDatesMethod(user,Event.DOWNLOAD_PLUGIN,-1,after,before,null);
+    }
+
+
+    private Set<Event> getEventMethod(String user,String ip, Event event,int task, Date after,Date before,Status status){
+        Set<Event> eventSet = new HashSet<>();
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after, before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(user==null && event ==null && task==-1 && status==null && ip==null){
+                    eventSet.add(m.getEvent());
+                }
+                else if(user==null && event==null && task==-1 &&status ==null){
+                    if(m.getIp().equals(ip)){
+                        eventSet.add(m.getEvent());
+                    }
+                }
+                else if(user!=null&& ip==null && event==null && task==-1 &&status ==null){
+                    if(m.getUserName().equals(user)){
+                        eventSet.add(m.getEvent());
+                    }
+                }
+                else if(user==null && event==null && task==-1 &&status !=null){
+                    if(m.getStatus().equals(status)){
+                        eventSet.add(m.getEvent());
+                    }
+                }
+                else if(user==null &&event!=null &&task!=-1 &&status==null){
+                    if(m.getEvent().equals(event)&& m.getTask_num()==task){
+                        eventSet.add(m.getEvent());
+                    }
+                }
+
+
+            }
+        }
+        return eventSet;
+    }
+
+    @Override
+    public int getNumberOfAllEvents(Date after, Date before) {
+        return getEventMethod(null,null,null,-1,after,before,null).size();
+
+    }
+
+    @Override
+    public Set<Event> getAllEvents(Date after, Date before) {
+
+        return getEventMethod(null,null,null,-1,after,before,null);
+    }
+
+    @Override
+    public Set<Event> getEventsForIP(String ip, Date after, Date before) {
+        return getEventMethod(null, ip, null,-1,after,before,null);
+    }
+
+    @Override
+    public Set<Event> getEventsForUser(String user, Date after, Date before) {
+        return getEventMethod(user,null,null,-1,after,before,null);
+    }
+
+    @Override
+    public Set<Event> getFailedEvents(Date after, Date before) {
+        return getEventMethod(null,null,null,-1,after,before,Status.FAILED);
+    }
+
+    @Override
+    public Set<Event> getErrorEvents(Date after, Date before) {
+        return getEventMethod(null,null,null,-1,after,before,Status.ERROR);
+    }
+
+    @Override
+    public int getNumberOfAttemptToSolveTask(int task, Date after, Date before) {
+        int count = 0;
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after,before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(m.getEvent().equals(Event.SOLVE_TASK)&& m.getTask_num()==task){
+                    count++;
+                }
+            }
+        }return  count;
+    }
+
+    @Override
+    public int getNumberOfSuccessfulAttemptToSolveTask(int task, Date after, Date before) {
+        int count = 0;
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after,before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(m.getEvent().equals(Event.DONE_TASK)&& m.getTask_num()==task){
+                    count++;
+                }
+            }
+        }return  count;
+    }
+
+    @Override
+    public Map<Integer, Integer> getAllSolvedTasksAndTheirNumber(Date after, Date before) {
+        Map<Integer,Integer> task_qnt = new HashMap<>();
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after,before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(m.getEvent().equals(Event.SOLVE_TASK)){
+
+                if(task_qnt.containsKey(m.getTask_num())){
+                    int count = task_qnt.get(m.getTask_num());
+                    count++;
+                    task_qnt.put(m.getTask_num(), count);
+                }
+                else{
+                    task_qnt.put(m.getTask_num(),1);
+                }
+            }}}
+        return task_qnt;
+    }
+
+    @Override
+    public Map<Integer, Integer> getAllDoneTasksAndTheirNumber(Date after, Date before) {
+        Map<Integer,Integer> task_qnt = new HashMap<>();
+        for(Map.Entry<Date, List<MyLog>> entry: filterLogs(after,before).entrySet()){
+            for(MyLog m: entry.getValue()){
+                if(m.getEvent().equals(Event.DONE_TASK)){
+
+                    if(task_qnt.containsKey(m.getTask_num())){
+                        int count = task_qnt.get(m.getTask_num());
+                        count++;
+                        task_qnt.put(m.getTask_num(), count);
+                    }
+                    else{
+                        task_qnt.put(m.getTask_num(),1);
+                    }
+                }}}
+        return task_qnt;
     }
 }

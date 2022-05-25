@@ -26,6 +26,10 @@ public class Solution {
         //System.out.println(logParser.getLoggedUsers(null, null));
         System.out.println(logParser.getSolvedTaskUsers(null,null,-1));
         System.out.println(logParser.getDateWhenUserLoggedFirstTime("Vasya Pupkin",new Date(),new Date()));
+        System.out.println(logParser.getFailedEvents(null,null));
+        System.out.println(logParser.getNumberOfAttemptToSolveTask(18,null,null));
+        System.out.println(logParser.getAllSolvedTasksAndTheirNumber(null,null));
+        System.out.println(logParser.getEventsForUser("Vasya Pupkin", null, null));
 
 
     }
