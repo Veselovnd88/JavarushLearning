@@ -10,7 +10,7 @@ public class Solution {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         Date date = null;
         try {
-            date = sdf.parse("11.12.2013 10:11:12");
+            date = sdf.parse("03.01.2014 03:45:23");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -30,6 +30,9 @@ public class Solution {
         System.out.println(logParser.getNumberOfAttemptToSolveTask(18,null,null));
         System.out.println(logParser.getAllSolvedTasksAndTheirNumber(null,null));
         System.out.println(logParser.getEventsForUser("Vasya Pupkin", null, null));
+        System.out.println(logParser.execute("get ip for user = \"Vasya Pupkin\""));
+        System.out.println(logParser.execute("get ip for date = \"03.01.2014 03:45:23\""));
+        System.out.println(logParser.getUniqueIPs(date,date));
 
 
     }

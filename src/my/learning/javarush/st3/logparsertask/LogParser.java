@@ -1,29 +1,24 @@
 package my.learning.javarush.st3.logparsertask;
 
-import my.learning.javarush.st3.logparsertask.query.DateQuery;
-import my.learning.javarush.st3.logparsertask.query.EventQuery;
-import my.learning.javarush.st3.logparsertask.query.IPQuery;
-import my.learning.javarush.st3.logparsertask.query.UserQuery;
+import my.learning.javarush.st3.logparsertask.query.*;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
+public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQuery {
     private HashMap<String, List<MyLog>> ipLog = new HashMap<>();
-    private HashMap<Date,List<MyLog>> dateLog = new HashMap<>();
+    private final HashMap<Date,List<MyLog>> dateLog = new HashMap<>();
     private List<MyLog> logList = new ArrayList<>();
-    private Path logDir;
+    private final Path logDir;
     public LogParser(Path logDir){
         this.logDir = logDir;
         parseLogs();
@@ -33,36 +28,22 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
     public Event chooseEvent(String s){
         String[] parts = s.split(" ");
         String event = parts[0];
-        if(event.equals("LOGIN")){
-            return Event.LOGIN;
-        }
-        else if(event.equals("DOWNLOAD_PLUGIN")){
-            return Event.DOWNLOAD_PLUGIN;
-        }
-        else if(event.equals("WRITE_MESSAGE")){
-            return Event.WRITE_MESSAGE;
-        }
-        else if(event.equals("SOLVE_TASK")){
-            return Event.SOLVE_TASK;
-        }
-        else if(event.equals("DONE_TASK")){
-            return Event.DONE_TASK;
-        }
-        else{
-            return null;
-        }
+        return switch (event) {
+            case "LOGIN" -> Event.LOGIN;
+            case "DOWNLOAD_PLUGIN" -> Event.DOWNLOAD_PLUGIN;
+            case "WRITE_MESSAGE" -> Event.WRITE_MESSAGE;
+            case "SOLVE_TASK" -> Event.SOLVE_TASK;
+            case "DONE_TASK" -> Event.DONE_TASK;
+            default -> null;
+        };
     }
     public Status chooseStatus(String s){
-        if(s.equals("OK")){
-            return Status.OK;
-        }
-        else if(s.equals("FAILED")){
-            return Status.FAILED;
-        }
-        else if(s.equals("ERROR")){
-            return Status.ERROR;
-        }
-        else{return null;}
+        return switch (s) {
+            case "OK" -> Status.OK;
+            case "FAILED" -> Status.FAILED;
+            case "ERROR" -> Status.ERROR;
+            default -> null;
+        };
     }
     public MyLog parseLine(String line){
         int task_num = 0;
@@ -75,7 +56,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         Date date = null;
         try {
             date = sdf.parse(parts[2]);
-         //   Systema.out.println(date);
+         //   System.out.println(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -183,11 +164,11 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
                 if(entry.getKey().after(after)|| entry.getKey().equals(after)){
                     filteredMap.put(entry.getKey(),entry.getValue());
                 }}
-            else if(before==null && after==null){
+            else if(before == null){
                filteredMap.put(entry.getKey(),entry.getValue());
             }
             else  {
-                if(entry.getKey().before(before)&&entry.getKey().after(after)){
+                if((entry.getKey().before(before)||entry.getKey().equals(before))&& (entry.getKey().after(after)||entry.getKey().equals(after))){
                     filteredMap.put(entry.getKey(),entry.getValue());
                 }
             }
@@ -403,7 +384,8 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         if(dates.size()==0){
             return null;
         }
-        return dates.stream().sorted().toList().get(0);
+        return //dates.stream().sorted().toList().get(0);
+                dates.stream().sorted().collect(Collectors.toList()).get(0);
     }
 
     @Override
@@ -415,7 +397,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         }
         else{
            return  //dates.stream().sorted().collect(Collectors.toList()).get(0);
-                   dates.stream().sorted().toList().get(0);
+                   dates.stream().sorted().collect(Collectors.toList()).get(0);
         }
     }
 
@@ -427,7 +409,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
             return null;
         }
         else{
-            return  dates.stream().sorted().toList().get(0);
+            return  dates.stream().sorted().collect(Collectors.toList()).get(0);
         }
     }
 
@@ -460,7 +442,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
                         eventSet.add(m.getEvent());
                     }
                 }
-                else if(user==null && event==null && task==-1 &&status !=null){
+                else if(user == null && event == null && task == -1){
                     if(m.getStatus().equals(status)){
                         eventSet.add(m.getEvent());
                     }
@@ -569,5 +551,60 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
                     }
                 }}}
         return task_qnt;
+    }
+
+    @Override
+    public Set<Object> execute(String query) {
+        Set<? extends Object> mySet = new HashSet<>();
+        String[] parts = query.split(" ");
+        String f_query = parts[0]+" "+parts[1];
+        switch (f_query){
+            case ("get ip") :
+                if(parts.length==2){
+
+                mySet = getUniqueIPs(null,null);}
+                else {
+                    String field = query.substring(query.indexOf("\"")).replace("\"","");
+                    System.out.println(field);
+                    switch(parts[3]){
+                        case ("user"): {
+                        //String user = query.substring(query.indexOf("\"")).replace("\"","");
+                        //System.out.println(field);
+                        mySet = getIPsForUser(field,null,null);
+                        break;
+                    }
+                        case ("date") :{
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+                            Date date = null;
+                            try {
+                                date = sdf.parse(field);
+                                System.out.println(date);
+                                mySet = getUniqueIPs(date,date);
+                                //   System.out.println(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+
+                }
+            break;
+            case ("get user"): mySet = getAllUsers();
+            break;
+            case ("get date"): mySet = dateLog.keySet();
+            break;
+            case ("get event"): mySet = getAllEvents(null,null); break;
+            case ("get status"):{
+                Set<Status> s = new HashSet<>();
+                for(Map.Entry<Date, List<MyLog>> entry: dateLog.entrySet()){
+                    for(MyLog m: entry.getValue()){
+                        s.add(m.getStatus());
+                    }
+                } mySet = s; break;
+            }
+        };
+
+        return (Set<Object>) mySet;
     }
 }
