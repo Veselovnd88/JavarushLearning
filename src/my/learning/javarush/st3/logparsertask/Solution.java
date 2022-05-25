@@ -32,7 +32,8 @@ public class Solution {
         System.out.println(logParser.getEventsForUser("Vasya Pupkin", null, null));
         System.out.println(logParser.execute("get ip for user = \"Vasya Pupkin\""));
         System.out.println(logParser.execute("get ip for date = \"03.01.2014 03:45:23\""));
-        System.out.println(logParser.getUniqueIPs(date,date));
+        System.out.println(logParser.execute("get ip for status = \"OK\""));
+
 
 
     }

@@ -575,7 +575,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                     }
                         case ("date") :{
                             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-                            Date date = null;
+                            Date date;
                             try {
                                 date = sdf.parse(field);
                                 System.out.println(date);
@@ -584,7 +584,15 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
+                            break;
+                        }
+                        case ("event"):{
+                            mySet = getIPsForEvent(chooseEvent(field),null,null);
+                            break;
+                        }
+                        case("status"):{
+                            mySet = getIPsForStatus(chooseStatus(field),null,null);
+                            break;
                         }
                     }
 
@@ -603,7 +611,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                     }
                 } mySet = s; break;
             }
-        };
+        }
 
         return (Set<Object>) mySet;
     }
