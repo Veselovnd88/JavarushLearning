@@ -282,8 +282,13 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                         users.add(m.getUserName());
                 }
                 }
-                else if (task==-1){
+                else if (task==-1 && event!=null){
                     if(m.getEvent()==event && m.getStatus()==status){
+                        users.add(m.getUserName());
+                    }
+                }
+                else if(event == null){
+                    if(m.getStatus().equals(status)){
                         users.add(m.getUserName());
                     }
                 }
@@ -354,6 +359,16 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                 }
                 else if(user==null&& event==null&&status!=null){
                     if(m.getStatus().equals(status)){
+                        datesSet.add(entry.getKey());
+                    }
+                }
+                else if(user!=null && event==null &&status==null){
+                    if(m.getUserName().equals(user)){
+                        datesSet.add(entry.getKey());
+                    }
+                }
+                else if(user==null &&event!=null &&status==null){
+                    if(m.getEvent().equals(event)){
                         datesSet.add(entry.getKey());
                     }
                 }
@@ -558,13 +573,14 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         Set<? extends Object> mySet = new HashSet<>();
         String[] parts = query.split(" ");
         String f_query = parts[0]+" "+parts[1];
+        String field;
         switch (f_query){
             case ("get ip") :
                 if(parts.length==2){
 
                 mySet = getUniqueIPs(null,null);}
                 else {
-                    String field = query.substring(query.indexOf("\"")).replace("\"","");
+                    field = query.substring(query.indexOf("\"")).replace("\"","");
                     System.out.println(field);
                     switch(parts[3]){
                         case ("user"): {
@@ -595,12 +611,86 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                             break;
                         }
                     }
-
                 }
             break;
-            case ("get user"): mySet = getAllUsers();
+            case ("get user"):
+                if(parts.length==2){
+                mySet = getAllUsers();}
+                else {
+                    field = query.substring(query.indexOf("\"")).replace("\"","");
+                    System.out.println(field);
+                    switch(parts[3]){
+                        case ("ip"): {
+                            //String user = query.substring(query.indexOf("\"")).replace("\"","");
+                            //System.out.println(field);
+                            mySet = getUsersForIP(field,null,null);
+                            break;
+                        }
+                        case ("date") :{
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+                            Date date;
+                            try {
+                                date = sdf.parse(field);
+                                //System.out.println(date);
+                                Set<String> s = new HashSet<>();
+                                for(Map.Entry<Date, List<MyLog>> entry: filterLogs(date,date).entrySet()){
+                                    if(entry.getKey().equals(date)){
+                                        for(MyLog m: entry.getValue()){
+                                            s.add(m.getUserName());
+                                        }
+                                    }
+                                }mySet=s;
+                                //   System.out.println(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        }
+                        case ("event"):{
+                            mySet = getUserWithStatus(chooseEvent(field),null,null,null,-1);
+                            break;
+                        }
+                        case("status"):{
+                            mySet = getUserWithStatus(null,null,null,chooseStatus(field),-1);
+                            break;
+                        }
+                    }
+                }
             break;
-            case ("get date"): mySet = dateLog.keySet();
+            case ("get date"):
+                if(f_query.length()==2){
+                mySet = dateLog.keySet();}
+                else {
+                    field = query.substring(query.indexOf("\"")).replace("\"","");
+                    //System.out.println(field);
+                    switch(parts[3]){
+                        case ("ip"): {
+                            //String user = query.substring(query.indexOf("\"")).replace("\"","");
+                            //System.out.println(field);
+                            Set<Date> s = new HashSet<>();
+                            for(Map.Entry<Date,List<MyLog>> entry: dateLog.entrySet()){
+                                for(MyLog m: entry.getValue()){
+                                    if(m.getIp().equals(field)){
+                                        s.add(entry.getKey());
+                                    }
+                                }
+                            } mySet=s;
+                            break;
+                        }
+                        case ("user") :{
+                            mySet = getDatesForUserAndEvent(field,null,null,null);
+                            break;
+                        }
+                        case ("event"):{
+                            mySet = getDatesMethod(null,chooseEvent(field),-1,null,null,null);
+                            break;
+                        }
+                        case("status"):{
+                            mySet = getDatesMethod(null,null,-1,null,null,chooseStatus(field));
+                            break;
+                        }
+                    }
+                }
             break;
             case ("get event"): mySet = getAllEvents(null,null); break;
             case ("get status"):{
