@@ -648,8 +648,10 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                                 List<Date> pair = getAddDates(query);
                                 after = pair.get(0);
                                 before = pair.get(1);
-                                if(!date.after(after)&&!date.before(before)){
-                                    break;
+                                if(!date.after(after)||!date.before(before)){
+                                    System.out.println("не попало в диапазон");
+                                    //break;
+
                                 }
                             }
                             mySet = getUniqueIPs(date,date);
@@ -779,7 +781,13 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                             break;
                         }
                         case ("event"):{
-                            mySet = getDatesMethod(null,chooseEvent(field),-1,null,null,null);
+                            if(add_query){
+                                List<Date> pair = getAddDates(query);
+                                after = pair.get(0);
+                                before = pair.get(1);
+                                //System.out.println(getAddDates(query));
+                            }
+                            mySet = getDatesMethod(null,chooseEvent(field),-1,after,before,null);
                             break;
                         }
                         case("status"):{
@@ -828,14 +836,17 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                             break;
                         }
                         case ("date"):{
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-                            Date date;
-                            try {
-                                date = sdf.parse(field);
-                                mySet = getAllEvents(date,date);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            Date date = parseDate(field);
+                            if(add_query){
+                                List<Date> pair = getAddDates(query);
+                                after = pair.get(0);
+                                before = pair.get(1);
+                                if(!date.after(after)&&!date.before(before)){
+                                    break;
+                                }
                             }
+                            mySet = getAllEvents(date,date);
+
                             break;
                         }
                         case("status"):{
@@ -860,24 +871,55 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                     }
                 } mySet = s; break;}
                 else {
-                    field = query.substring(query.indexOf("\"")).replace("\"","");
+                    field = getField(query).replace("\"", "");
+                    int indexOvNextPart = (query.indexOf(field)+field.length()+1);
+                    if(indexOvNextPart < query.length()){
+                        // System.out.println("Доп. запрос");
+                        add_query = true;
+                    }
 
                     switch(parts[3]){
                         case ("ip"): {
-                            mySet = getStatusHelper(null,field,null,-1,null,null,null);
+                            if(add_query){
+                                List<Date> pair = getAddDates(query);
+                                after = pair.get(0);
+                                before = pair.get(1);
+                                //System.out.println(getAddDates(query));
+                            }
+                            mySet = getStatusHelper(null,field,null,-1,after,before,null);
                             break;
                         }
                         case ("user") :{
-                            mySet = getStatusHelper(field,null,null,-1,null,null,null);
+                            if(add_query){
+                                List<Date> pair = getAddDates(query);
+                                after = pair.get(0);
+                                before = pair.get(1);
+                                //System.out.println(getAddDates(query));
+                            }
+                            mySet = getStatusHelper(field,null,null,-1,after,before,null);
                             break;
                         }
                         case ("date"):{
                             Date date = parseDate(field);
+                            if(add_query){
+                                List<Date> pair = getAddDates(query);
+                                after = pair.get(0);
+                                before = pair.get(1);
+                                if(!date.after(after)&&!date.before(before)){
+                                    break;
+                                }
+                            }
                             mySet = getStatusHelper(null,null,null,-1,date,date,null);
                             break;
                         }
                         case("event"):{
-                            mySet = getStatusHelper(null,null,chooseEvent(field),-1,null,null,null);
+                            if(add_query){
+                                List<Date> pair = getAddDates(query);
+                                after = pair.get(0);
+                                before = pair.get(1);
+                                //System.out.println(getAddDates(query));
+                            }
+                            mySet = getStatusHelper(null,null,chooseEvent(field),-1,after,before,null);
                             break;
                         }
                     }

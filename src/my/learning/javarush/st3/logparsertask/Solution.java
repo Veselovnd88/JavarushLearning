@@ -37,9 +37,9 @@ public class Solution {
         System.out.println(logParser.execute("get ip for user = \"Eduard Petrovich Morozko\""));
 
         System.out.println(logParser.execute("get ip for user = \"Eduard Petrovich Morozko\" and date between \"11.12.2013 10:11:11\" and \"03.01.2014 23:59:59\""));
-        System.out.println(logParser.execute("get ip for date = \"03.01.2011 03:45:23\" and date between \"11.12.2013 10:11:11\" and \"03.01.2014 23:59:59\""));
-        System.out.println(logParser.execute("get date for user = \"Eduard Petrovich Morozko\" and date between \"11.12.2013 10:11:11\" and \"03.01.2014 23:59:59\""));
 
+        System.out.println(logParser.execute("get date for user = \"Eduard Petrovich Morozko\" and date between \"11.12.2013 10:11:11\" and \"03.01.2014 23:59:59\""));
+        System.out.println(logParser.execute("get ip for date = \"13.09.2013 5:04:50\" and date between \"11.12.2013 10:11:11\" and \"03.01.2014 23:59:59\""));
 
     }
 }
