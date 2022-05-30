@@ -56,5 +56,6 @@
     <orderEntry type="library" name="commons-collections4-4.0" level="project" />
     <orderEntry type="library" name="google.guava" level="project" />
     <orderEntry type="library" name="commons-collections4-4.01" level="project" />
+    <orderEntry type="library" name="jsoup" level="project" />
   </component>
 </module>
