@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +24,10 @@ public class HHStrategy implements Strategy{
     protected Document getDocument(String searchingString, int page) throws IOException{
         final String userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)" +
                 " Chrome/101.0.4951.64 Safari/537.36 OPR/87.0.4390.25";
-        return Jsoup.connect(String.format(URL_FORMAT,searchingString,page)).userAgent(userAgent)
-                .referrer("https://hh.ru/").get();
+        File file = new File("src/my/learning/javarush/st3/agreggator/sample.html");
+        return Jsoup.parse(file,"UTF-8");
+        //return Jsoup.connect(String.format(URL_FORMAT,searchingString,page)).userAgent(userAgent)
+          //      .referrer("https://hh.ru/").get();
     }
     @Override
     public List<Vacancy> getVacancies(String searchString){
