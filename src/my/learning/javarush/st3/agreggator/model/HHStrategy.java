@@ -1,5 +1,6 @@
 package my.learning.javarush.st3.agreggator.model;
 
+import my.learning.javarush.st2.AdapterFileOutputStream;
 import my.learning.javarush.st3.agreggator.vo.Vacancy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,30 +20,59 @@ public class HHStrategy implements Strategy{
         System.out.println(String.format(URL_FORMAT, "Moscow",2));
     }
 
-
+    protected Document getDocument(String searchingString, int page) throws IOException{
+        final String userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)" +
+                " Chrome/101.0.4951.64 Safari/537.36 OPR/87.0.4390.25";
+        return Jsoup.connect(String.format(URL_FORMAT,searchingString,page)).userAgent(userAgent)
+                .referrer("https://hh.ru/").get();
+    }
     @Override
     public List<Vacancy> getVacancies(String searchString){
         //if(searchString==null){
          //   return Collections.emptyList();
        // }
-        final String userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)" +
-                " Chrome/101.0.4951.64 Safari/537.36 OPR/87.0.4390.25";
+        int page = 0;
         Document doc = null;
+        List<Vacancy> vacancies = new ArrayList<>();
         try {
-            doc = Jsoup.connect("https://javarush.ru/testdata/big28data.html").userAgent(userAgent)
-                    .referrer("https://hh.ru").get();
+            do {
+                doc = getDocument(searchString, page);
+                //System.out.println(doc);
+                Elements els_premium = doc.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy vacancy-serp__vacancy_premium");
+                Elements els_standard_plus = doc.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy vacancy-serp__vacancy_standard_plus");
 
-            Elements els = doc.getElementsByAttributeValue("data-qa","vacancy-serp__vacancy");
-            for(Element el:els){
-                System.out.println(el.getElementsByAttributeValue("data-qa","vacancy-serp__vacancy-title"));
-            }
-        } catch (IOException e){
+
+
+                if(els_premium.isEmpty() && els_standard_plus.isEmpty()) break;
+                for(Element el: els_premium){
+                    Elements links = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title");
+
+                    //System.out.println(links.get(0).text());
+                    Vacancy vacancy = new Vacancy();
+                    vacancy.setSiteName("hh.ru");
+                    vacancy.setTitle(links.get(0).text());
+                    vacancy.setUrl(links.get(0).attr("href"));
+
+
+                    System.out.println(vacancy.getTitle());
+                    System.out.println(vacancy.getUrl());
+
+
+                }
+                for(Element el: els_standard_plus){
+                    Elements links = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title");
+                    //System.out.println(links.get(0).text());
+                }
+                page++;
+
+            } while(page<1);
+
+        }             catch(IOException e){
             e.printStackTrace();
+
         }
 
 
-
-        List<Vacancy> vacancies = new ArrayList<>();
         return vacancies;
     }
 }

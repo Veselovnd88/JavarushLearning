@@ -30,7 +30,7 @@ public class Controller {// класс в котором будет содерж
     public void scan() {
         List<Vacancy> vacancy = new ArrayList<>();
         for(Provider p: providers){
-            vacancy.addAll(p.getJavaVacancies(null));
+            vacancy.addAll(p.getJavaVacancies("Moscow"));
         }
         System.out.println(vacancy.size());
     }
