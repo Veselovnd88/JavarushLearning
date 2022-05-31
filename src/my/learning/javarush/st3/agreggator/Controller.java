@@ -1,6 +1,7 @@
 package my.learning.javarush.st3.agreggator;
 
 import my.learning.javarush.st3.agreggator.model.HHStrategy;
+import my.learning.javarush.st3.agreggator.model.Model;
 import my.learning.javarush.st3.agreggator.model.Provider;
 import my.learning.javarush.st3.agreggator.vo.Vacancy;
 
@@ -10,28 +11,18 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Controller {// класс в котором будет содержаться логика работы программы
-    private Provider[] providers;
+    private Model model;
 
-    public Controller(Provider...providers){// сюда передаются провайдеры для дальнейшей  проработки
-        if(providers==null || providers.length==0){
+    public Controller(Model model){// сюда передаются провайдеры для дальнейшей  проработки
+        if(model ==null){
             throw new IllegalArgumentException();
         }
         else{
-            this.providers = providers;}
+            this.model = model;}
+    }
+    public void onCitySelect(String city){
+        model.selectCity(city);
     }
 
-    @Override
-    public String toString() {
-        return "Controller{" +
-                "providers=" + Arrays.toString(providers) +
-                '}';
-    }
 
-    public void scan() {
-        List<Vacancy> vacancy = new ArrayList<>();
-        for(Provider p: providers){
-            vacancy.addAll(p.getJavaVacancies("Moscow"));
-        }
-        System.out.println(vacancy.size());
-    }
 }

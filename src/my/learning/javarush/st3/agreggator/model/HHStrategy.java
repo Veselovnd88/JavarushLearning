@@ -24,8 +24,8 @@ public class HHStrategy implements Strategy{
     protected Document getDocument(String searchingString, int page) throws IOException{
         final String userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)" +
                 " Chrome/101.0.4951.64 Safari/537.36 OPR/87.0.4390.25";
-        //File file = new File("src/my/learning/javarush/st3/agreggator/sample.html");
-       // return Jsoup.parse(file,"UTF-8");
+       //File file = new File("src/my/learning/javarush/st3/agreggator/sample.html");
+      //  return Jsoup.parse(file,"UTF-8");
         return Jsoup.connect(String.format(URL_FORMAT,searchingString,page)).userAgent(userAgent)
               .referrer("https://hh.ru/").get();
     }
@@ -85,7 +85,7 @@ public class HHStrategy implements Strategy{
                 }
                 page++;
 
-            } while(true);
+            } while(page<1);// #TODO
 
         }    catch(IOException e){
             e.printStackTrace();
