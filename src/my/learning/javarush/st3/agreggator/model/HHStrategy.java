@@ -24,10 +24,10 @@ public class HHStrategy implements Strategy{
     protected Document getDocument(String searchingString, int page) throws IOException{
         final String userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)" +
                 " Chrome/101.0.4951.64 Safari/537.36 OPR/87.0.4390.25";
-        File file = new File("src/my/learning/javarush/st3/agreggator/sample.html");
-        return Jsoup.parse(file,"UTF-8");
-        //return Jsoup.connect(String.format(URL_FORMAT,searchingString,page)).userAgent(userAgent)
-          //      .referrer("https://hh.ru/").get();
+        //File file = new File("src/my/learning/javarush/st3/agreggator/sample.html");
+       // return Jsoup.parse(file,"UTF-8");
+        return Jsoup.connect(String.format(URL_FORMAT,searchingString,page)).userAgent(userAgent)
+              .referrer("https://hh.ru/").get();
     }
     @Override
     public List<Vacancy> getVacancies(String searchString){
@@ -49,28 +49,45 @@ public class HHStrategy implements Strategy{
                 if(els_premium.isEmpty() && els_standard_plus.isEmpty()) break;
                 for(Element el: els_premium){
                     Elements links = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title");
-
-                    //System.out.println(links.get(0).text());
+                    Elements location = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-address");
+                    Elements companyName = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-employer");
+                    Elements salary = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-compensation");
                     Vacancy vacancy = new Vacancy();
                     vacancy.setSiteName("hh.ru");
                     vacancy.setTitle(links.get(0).text());
                     vacancy.setUrl(links.get(0).attr("href"));
+                    vacancy.setCity(location.get(0).text());
+                    vacancy.setCompanyName(companyName.get(0).text());
+                    vacancy.setSalary(salary.size()>0?salary.get(0).text():"");
+                    vacancies.add(vacancy);
+                   // System.out.println(vacancy.getTitle());
+                   // System.out.println(vacancy.getUrl());
+                   // System.out.println(vacancy.getCity());
+                    //System.out.println(vacancy.getCompanyName());
+                   // System.out.println(vacancy.getSalary());
 
-
-                    System.out.println(vacancy.getTitle());
-                    System.out.println(vacancy.getUrl());
 
 
                 }
                 for(Element el: els_standard_plus){
                     Elements links = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title");
-                    //System.out.println(links.get(0).text());
+                    Elements location = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-address");
+                    Elements companyName = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-employer");
+                    Elements salary = el.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-compensation");
+                    Vacancy vacancy = new Vacancy();
+                    vacancy.setSiteName("hh.ru");
+                    vacancy.setTitle(links.get(0).text());
+                    vacancy.setUrl(links.get(0).attr("href"));
+                    vacancy.setCity(location.get(0).text());
+                    vacancy.setCompanyName(companyName.get(0).text());
+                    vacancy.setSalary(salary.size()>0?salary.get(0).text():"");
+                    vacancies.add(vacancy);
                 }
                 page++;
 
-            } while(page<1);
+            } while(true);
 
-        }             catch(IOException e){
+        }    catch(IOException e){
             e.printStackTrace();
 
         }
