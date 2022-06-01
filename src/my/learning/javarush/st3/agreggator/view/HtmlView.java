@@ -23,8 +23,7 @@ public class HtmlView implements View{
             //getDocument(filePath);
         String updated = getUpdatedFileContent(vacancies);
 
-            System.out.println(updated);
-        //updateFile(updated);
+        updateFile(updated);
         }
         catch (Exception e){
             e.printStackTrace();
