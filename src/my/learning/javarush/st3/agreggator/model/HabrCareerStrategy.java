@@ -49,8 +49,8 @@ public class HabrCareerStrategy implements Strategy {
                     Elements salary = element.getElementsByClass("salary");
                     vacancy.setSalary(salary.size() > 0 ? salary.get(0).text() : "Не указано");
                     vacancy.setUrl("https://career.habr.com" + titles.get(0).getElementsByTag("a").attr("href"));
-                    System.out.println(vacancy.getCompanyName());
-                    System.out.println(vacancy.getCity());
+                    // System.out.println(vacancy.getCompanyName());
+                    //System.out.println(vacancy.getCity());
                     vacancies.add(vacancy);
                 }
                 page++;
