@@ -2,7 +2,7 @@ package my.learning.javarush.st3.level9;
 
 public class oneChange {
     public static void main(String[] args) {
-        System.out.println(isOneEditAway("abаcd", "abcd"));
+        System.out.println(isOneEditAway("abcd", "abfcd"));
     }
 
     public static boolean isOneEditAway(String first, String second){
@@ -28,30 +28,34 @@ public class oneChange {
             //если больше одного - то фолс, если до 1 то тру
         }
         if(first.length()>second.length()){
-            char[] arr1 =second.toCharArray();//короткий
-            char[] arr2 = first.toCharArray();//длинный
-            int unmatched =0;
-            int p1=0;
-            int p2=0;
-            for(int i=0; i<second.length();i++){
-                if(arr2[i+p2]!=arr1[i+p1]){
-                    if(arr1[i]!=arr2[i+1]){
-                        return false;
-                    }
-                    unmatched++;
-                    p2++;
-                }
-
-                }if(unmatched>1){
-                    return false;
-
-
-            } return true;
-
+            return oneChar(first,second);
         }
-
-
-
+        else if(second.length()>first.length()){
+            return oneChar(second,first);
+        }
+        if(second.isEmpty()||first.isEmpty()){
+            return false;
+        }
     return false;
+    }
+
+    private static boolean oneChar(String first, String second){
+        char[] arr1 =second.toCharArray();//короткий
+        char[] arr2 = first.toCharArray();//длинный
+        int unmatched =0;
+        int p1=0;
+        int p2=0;
+        for(int i=0; i<second.length();i++){
+            if(arr2[i+p2]!=arr1[i+p1]){
+                if(arr1[i]!=arr2[i+1]){
+                    return false;
+                }
+                unmatched++;
+                p2++;
+            }
+
+        }if(unmatched>1){
+            return false;
+        } return true;
     }
 }
