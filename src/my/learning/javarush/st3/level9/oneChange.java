@@ -2,7 +2,8 @@ package my.learning.javarush.st3.level9;
 
 public class oneChange {
     public static void main(String[] args) {
-        System.out.println(isOneEditAway("abcd", "abfcd"));
+        System.out.println(Math.log(9)/Math.log(3));
+        //System.out.println(isOneEditAway("abcd", "abfcd"));
     }
 
     public static boolean isOneEditAway(String first, String second){
