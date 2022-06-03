@@ -7,7 +7,7 @@ public class PhotoPaint {
         if(originalColor==desiredColor){
             return false;
         }
-        if(y>image.length|| x>image[0].length){
+        if(y>=image.length|| x>=image[0].length|| x<0||y<0){
             return false;
         }
 
@@ -18,7 +18,7 @@ public class PhotoPaint {
 
     }
     public void paintFill(Color[][] image, int x, int y, Color desiredColor, Color oldColor){
-        if(x<0|| y<0||x>image[0].length||y>image.length){
+        if(x<0|| y<0||x>=image[0].length||y>=image.length){
             return;
         }
         if(image[y][x]==oldColor){
