@@ -57,4 +57,25 @@ public class ConsoleHelper {
             }
     }
     }
+
+    public static Operation askOperation(){
+        System.out.println("Введите номер для операции: для 1 - INFO, 2 - DEPOSIT, 3 - WITHDRAW, 4 - EXIT;");
+        String str = readString();
+        Operation op=null;
+        int num =0;
+        while(true){
+            try{
+                num = Integer.parseInt(str);
+                op = Operation.getAllowableOperationByOrdinal(num);
+                break;
+            }
+            catch (NumberFormatException e){
+                System.out.println("Введено не число");
+                str= readString();
+            } catch (IllegalArgumentException e){
+                System.out.println("Нет операции с заданным номером");
+                str = readString();
+            }
+        } return op;
+    }
 }
