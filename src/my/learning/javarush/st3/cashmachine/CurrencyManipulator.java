@@ -23,7 +23,13 @@ public class CurrencyManipulator {
             denominations.put(denomination,count);}
     }
 
-
+    public int getTotalAmount(){
+        int count =0;
+        for(Map.Entry<Integer,Integer> entry: denominations.entrySet()){
+            count= count+ entry.getKey()* entry.getValue();
+        }
+        return count;
+    }
     public Map<Integer, Integer> getDenominations() {
         return denominations;
     }
