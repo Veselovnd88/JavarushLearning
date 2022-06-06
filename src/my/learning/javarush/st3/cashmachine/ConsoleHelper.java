@@ -1,5 +1,7 @@
 package my.learning.javarush.st3.cashmachine;
 
+import my.learning.javarush.st3.cashmachine.exception.InterruptOperationException;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -8,17 +10,22 @@ public class ConsoleHelper {
     public static void writeMessage(String message){
         System.out.println(message);
     }
-    public static String readString(){
+    public static String readString() throws InterruptOperationException {
         String str=null;
         try{
             str = bis.readLine();
 
+
         }catch (Exception e){
             e.printStackTrace();
-        }return str;
+        }            if(str.toLowerCase().equals("exit")){
+                        throw new InterruptOperationException();
+        }
+
+        return str;
     }
 
-    public static String askCurrencyCode(){
+    public static String askCurrencyCode() throws InterruptOperationException {
         System.out.println("Введите код валюты, 3 символа");
         String str = readString();
         while(true){
@@ -31,7 +38,7 @@ public class ConsoleHelper {
         }
     } return str.toUpperCase();
     }
-    public static String[] getValidTwoDigits(String currencyCode){
+    public static String[] getValidTwoDigits(String currencyCode) throws InterruptOperationException {
 
         System.out.println("Введите два положительных числа: номинал и количество");
         String str=readString();
@@ -58,7 +65,7 @@ public class ConsoleHelper {
     }
     }
 
-    public static Operation askOperation(){
+    public static Operation askOperation() throws InterruptOperationException {
         System.out.println("Введите номер для операции: для 1 - INFO, 2 - DEPOSIT, 3 - WITHDRAW, 4 - EXIT;");
         String str = readString();
         Operation op=null;
