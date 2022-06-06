@@ -79,11 +79,11 @@ public class CurrencyManipulator {
         return null;
     }
     private int greedySum(int nominal, int left, Map<Integer,Integer> wit){
-        int qnt = left/nominal;
+        int qnt = left/nominal;// количество возможных купюр
         if(qnt==0){
             return 0;
         }
-        if(qnt<=denominations.get(nominal)){
+        if(qnt<=denominations.get(nominal)){//если количество меньше возможных
             wit.put(nominal,qnt);
             return nominal*qnt;
         }else{
