@@ -25,6 +25,9 @@ class WithdrawCommand implements Command{
         else{
             sum = ConsoleHelper.getOneDigit();
         }}
+        try{
+
+
         Map<Integer, Integer> mp = cm.withdrawAmount(sum);
         TreeMap<Integer,Integer> sortedMap = new TreeMap<Integer,Integer>(new Comparator<Integer>() {
             @Override
@@ -37,7 +40,10 @@ class WithdrawCommand implements Command{
         sortedMap.forEach((x,y)->{
                     System.out.println(x+" - "+ y);
                 }
-                );
+                );}
+        catch (NotEnoughMoneyException e){
+            System.out.println("Нет возможности выдать указанную сумму");
+        }
         ConsoleHelper.writeMessage("Операция проведена успешно");
 
 
