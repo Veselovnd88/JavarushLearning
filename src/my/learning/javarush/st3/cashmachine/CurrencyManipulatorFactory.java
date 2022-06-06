@@ -1,5 +1,7 @@
 package my.learning.javarush.st3.cashmachine;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,5 +19,9 @@ public  class CurrencyManipulatorFactory {
             map.put(currencyCode.toLowerCase(),cm);
             return cm;
         }
+    }
+
+    public static Collection<CurrencyManipulator> getAllCurrencyManipulators(){
+        return map.values();
     }
 }

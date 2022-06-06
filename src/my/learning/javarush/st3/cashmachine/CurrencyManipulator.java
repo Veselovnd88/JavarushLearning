@@ -22,7 +22,11 @@ public class CurrencyManipulator {
         else{
             denominations.put(denomination,count);}
     }
-
+    public boolean hasMoney(){
+        if (getTotalAmount()==0){
+            return false;
+        } return true;
+    }
     public int getTotalAmount(){
         int count =0;
         for(Map.Entry<Integer,Integer> entry: denominations.entrySet()){
