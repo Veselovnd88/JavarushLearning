@@ -7,6 +7,7 @@ public class CurrencyManipulator {
     private String currencyCode;
     private Map<Integer,Integer> denominations=new HashMap<>();
 
+
     public CurrencyManipulator(String currencyCode) {
         this.currencyCode = currencyCode;
     }
@@ -27,6 +28,17 @@ public class CurrencyManipulator {
             return false;
         } return true;
     }
+
+
+    public boolean isAmountAvailable(int expected){
+        if(expected<=getTotalAmount()){
+
+            return true;
+        }
+        return false;
+    }
+
+
     public int getTotalAmount(){
         int count =0;
         for(Map.Entry<Integer,Integer> entry: denominations.entrySet()){
@@ -36,5 +48,10 @@ public class CurrencyManipulator {
     }
     public Map<Integer, Integer> getDenominations() {
         return denominations;
+    }
+
+
+    private Map<Integer,Integer> withdrawAmount(int expectedAmount){
+        return null;
     }
 }

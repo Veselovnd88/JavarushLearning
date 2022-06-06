@@ -65,6 +65,26 @@ public class ConsoleHelper {
     }
     }
 
+    public static int getOneDigit() throws InterruptOperationException {
+        boolean flag = true;
+        int value=-1;
+        ConsoleHelper.writeMessage("Введите сумму");
+        do{
+            String sum = ConsoleHelper.readString();
+            try{
+                value = Integer.parseInt(sum);
+
+                flag = false;
+                return value;}
+            catch (NumberFormatException e){
+
+                System.out.println("Сумма введена неверно");
+            }
+
+        } while(flag);
+        return value;
+    }
+
     public static Operation askOperation() throws InterruptOperationException {
         System.out.println("Введите номер для операции: для 1 - INFO, 2 - DEPOSIT, 3 - WITHDRAW, 4 - EXIT;");
         String str = readString();
