@@ -16,7 +16,27 @@ class WithdrawCommand implements Command{
     public void execute() throws InterruptOperationException {
         String curr =ConsoleHelper.askCurrencyCode();
         CurrencyManipulator cm = CurrencyManipulatorFactory.getManipulatorByCurrencyCode(curr);
-        int sum = ConsoleHelper.getOneDigit();
+        boolean flag = true;
+        int value=-1;
+        ConsoleHelper.writeMessage("Введите сумму");
+        do{
+            String sum = ConsoleHelper.readString();
+            try{
+                value = Integer.parseInt(sum);
+
+                flag = false;
+                break;}
+            catch (NumberFormatException e){
+
+                System.out.println("Сумма введена неверно");
+            }
+
+        } while(flag);
+        int sum = value;
+
+
+
+        //int sum = ConsoleHelper.getOneDigit();
         while(true){
         if(cm.isAmountAvailable(sum)){
             break;
