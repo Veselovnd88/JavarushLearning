@@ -1,6 +1,7 @@
 package my.learning.javarush.st3.cashmachine;
 
 import my.learning.javarush.st3.cashmachine.command.CommandExecutor;
+import my.learning.javarush.st3.cashmachine.command.LoginCommand;
 import my.learning.javarush.st3.cashmachine.exception.InterruptOperationException;
 
 import java.util.Locale;
@@ -12,6 +13,7 @@ public class CashMachine {
 
 
         try {
+            CommandExecutor.execute(Operation.LOGIN);
 
             Operation op = null;
             do {
