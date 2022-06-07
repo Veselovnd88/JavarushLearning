@@ -1,14 +1,21 @@
 package my.learning.javarush.st3.cashmachine.command;
 
+import my.learning.javarush.st3.cashmachine.CashMachine;
 import my.learning.javarush.st3.cashmachine.ConsoleHelper;
 import my.learning.javarush.st3.cashmachine.exception.InterruptOperationException;
 
+import java.util.ResourceBundle;
+
 public class LoginCommand implements Command {
+    private ResourceBundle validCreditCards;
+    private String props = CashMachine.class.getPackage().getName()+".resources.verifiedCards.properties";
     private String number = "123456789012";
     private String pin = "1234";
 
     @Override
     public void execute() throws InterruptOperationException {
+
+        System.out.println(props);
         ConsoleHelper.writeMessage("Logging in...");
 
         while (true) {
