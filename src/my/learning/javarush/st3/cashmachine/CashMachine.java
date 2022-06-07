@@ -7,7 +7,7 @@ import my.learning.javarush.st3.cashmachine.exception.InterruptOperationExceptio
 import java.util.Locale;
 
 public class CashMachine {
-
+    public static final String RESOURCE_PATH = CashMachine.class.getPackage().getName() + ".resources.";
     public static void main(String[] args) {
         Locale.setDefault(Locale.ENGLISH);
 

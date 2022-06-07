@@ -4,8 +4,10 @@ import my.learning.javarush.st3.cashmachine.exception.InterruptOperationExceptio
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ResourceBundle;
 
 public class ConsoleHelper {
+    private static  ResourceBundle res = ResourceBundle.getBundle(CashMachine.class.getPackage().getName()+".resources.common_en");
     private static BufferedReader bis = new BufferedReader(new InputStreamReader(System.in));
     public static void writeMessage(String message){
         System.out.println(message);
@@ -26,11 +28,11 @@ public class ConsoleHelper {
     }
 
     public static String askCurrencyCode() throws InterruptOperationException {
-        System.out.println("Введите код валюты, 3 символа");
+        ConsoleHelper.writeMessage(res.getString("choose.currency.code"));
         String str = readString();
         while(true){
         if (str.length()!=3){
-            System.out.println("Неправильный ввод, введите еще раз");
+            ConsoleHelper.writeMessage(res.getString("invalid.data"));
             str = readString();
         }
         else{
@@ -40,12 +42,12 @@ public class ConsoleHelper {
     }
     public static String[] getValidTwoDigits(String currencyCode) throws InterruptOperationException {
 
-        System.out.println("Введите два положительных числа: номинал и количество");
+        ConsoleHelper.writeMessage(res.getString("choose.denomination.and.count.format"));
         String str=readString();
         while (true){
             String[] parts = str.split(" ");
             if(parts.length!=2){
-                System.out.println("Введите 2 числа");
+                ConsoleHelper.writeMessage(res.getString("invalid.data"));
                 str = readString();
             }
             else{
@@ -58,7 +60,7 @@ public class ConsoleHelper {
                 if(flag){
                     return parts;
                 }else{
-                    System.out.println("Есть не только цифры");
+                    ConsoleHelper.writeMessage(res.getString("invalid.data"));
                     str = readString();
                 }
             }
@@ -68,7 +70,7 @@ public class ConsoleHelper {
     public static int getOneDigit() throws InterruptOperationException {
         boolean flag = true;
         int value=-1;
-        ConsoleHelper.writeMessage("Введите сумму");
+        ConsoleHelper.writeMessage(res.getString("choose.denomination.and.count.format"));
         do{
             String sum = ConsoleHelper.readString();
             try{
@@ -78,7 +80,7 @@ public class ConsoleHelper {
                 return value;}
             catch (NumberFormatException e){
 
-                System.out.println("Сумма введена неверно");
+                ConsoleHelper.writeMessage(res.getString("invalid.data"));
             }
 
         } while(flag);
@@ -86,7 +88,11 @@ public class ConsoleHelper {
     }
 
     public static Operation askOperation() throws InterruptOperationException {
-        System.out.println("Введите номер для операции: для 1 - INFO, 2 - DEPOSIT, 3 - WITHDRAW, 4 - EXIT;");
+        ConsoleHelper.writeMessage(res.getString("choose.operation"));
+        ConsoleHelper.writeMessage("1- "+ res.getString("operation.INFO"));
+        ConsoleHelper.writeMessage("2- "+ res.getString("operation.DEPOSIT"));
+        ConsoleHelper.writeMessage("3- "+ res.getString("operation.WITHDRAW"));
+        ConsoleHelper.writeMessage("4- "+ res.getString("operation.EXIT"));
         String str = readString();
         Operation op=null;
         int num =0;
@@ -95,14 +101,13 @@ public class ConsoleHelper {
                 num = Integer.parseInt(str);
                 op = Operation.getAllowableOperationByOrdinal(num);
                 break;
-            }
-            catch (NumberFormatException e){
-                System.out.println("Введено не число");
-                str= readString();
             } catch (IllegalArgumentException e){
-                System.out.println("Нет операции с заданным номером");
-                str = readString();
+                ConsoleHelper.writeMessage(res.getString("invalid.data"));
+                str= readString();
             }
         } return op;
+    }
+    public static void printExitMessage() {
+        ConsoleHelper.writeMessage(res.getString("the.end"));
     }
 }
