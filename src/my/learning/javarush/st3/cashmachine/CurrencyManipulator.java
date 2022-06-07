@@ -67,6 +67,7 @@ public class CurrencyManipulator {
         });
         int sum = getTotalAmount();//полная сумма
         int got = 0;//получено
+        int left_to_receive = expectedAmount;//осталось получить
         /*Что должно делать - берем полную сумму - делим на максимальный номинал - получаем сумму банкнот которую
         нам могут выдать.
         если запрашиваемая сумма меньше чем номинал - то эти банкноты пропускаем
@@ -77,24 +78,18 @@ public class CurrencyManipulator {
                 if(expectedAmount<i){
                     continue;//если меньше запрашиваемого - то проускаем
                 }
-                int received =greedySum(i,sum,withdrawals);// сколько денег получили (гипотетически)
-                if(got+received>expectedAmount){
-                    continue;
-                }
-                else{
-                    sum-=received;
-                    got+=received;
-                }
-                if(got==expectedAmount){
+                int received =greedySum(i,left_to_receive,withdrawals);// сколько денег получили (гипотетически)
+                left_to_receive-=received;//обновили сумму сколько осталось получить
+                got+=received;//обновили сумму сколько получили
+                if(got==expectedAmount){//если получили всю сумму раньше чем прошли цикл - стоп
                     break;
-                }
-        }
-
-        System.out.println(withdrawals);
+                }}
             if(withdrawals.size()==0||got<expectedAmount){
+                //если мапа пустая и полученное меньше ожидаемоего после проходки цикла
+                //бросаем исключение
                 throw new NotEnoughMoneyException();
             }
-
+            /*обновление начальной мапы*/
             for(Integer nominal : denominations.keySet()){
                 if(withdrawals.containsKey(nominal)){
                     int value = denominations.get(nominal) - withdrawals.get(nominal);
@@ -103,6 +98,9 @@ public class CurrencyManipulator {
             }
         return withdrawals;
     }
+
+    /* Делим то что осталось выдать на номинал - получаем - сумму и количество
+    * денег которые есть на депозите, возвращаем их в функцию и добавляем в мапу*/
     private int greedySum(int nominal, int left, Map<Integer,Integer> wit){
 
         int qnt = left/nominal;// количество возможных купюр
