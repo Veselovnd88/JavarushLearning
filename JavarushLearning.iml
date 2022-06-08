@@ -58,5 +58,8 @@
     <orderEntry type="library" name="commons-collections4-4.01" level="project" />
     <orderEntry type="library" name="jsoup" level="project" />
     <orderEntry type="library" name="jsoup1" level="project" />
+    <orderEntry type="library" name="eclipse.ecf.apache.httpcomponents.httpcore" level="project" />
+    <orderEntry type="library" name="eclipse.ecf.apache.httpcomponents.httpclient" level="project" />
+    <orderEntry type="library" name="eclipse.ecf.apache.commons.logging" level="project" />
   </component>
 </module>
