@@ -1,5 +1,6 @@
 package my.learning.javarush.st3.sokoban.view;
 
+import my.learning.javarush.st3.sokoban.model.Box;
 import javax.swing.*;
 import java.awt.*;
 

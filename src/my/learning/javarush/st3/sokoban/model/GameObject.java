@@ -5,10 +5,10 @@ import java.awt.*;
 public abstract class GameObject {
 
 
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    protected int x;
+    protected int y;
+    protected int width;
+    protected int height;
 
 
     public GameObject(int x, int y) {
