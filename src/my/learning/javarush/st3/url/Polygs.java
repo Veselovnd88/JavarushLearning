@@ -25,7 +25,7 @@ public class Polygs {
 
             if ((polygon.get(i).y > point.y) != (polygon.get(j).y > point.y)
                     //первая строчка - находится ли точка на уровне этого отрезка
-                    &&
+                    &&//тут про пересечение лучшей
                     (point.x < (polygon.get(j).x - polygon.get(i).x) * (point.y - polygon.get(i).y) / (polygon.get(j).y - polygon.get(i).y) + polygon.get(i).x)) {
                 result = !result;
             }
