@@ -1,4 +1,4 @@
-package my.learning.javarush.st3.url;
+/* package my.learning.javarush.st3.url;
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.*;
@@ -53,3 +53,4 @@ public class Mails {
 
 
 }
+*/

@@ -1,6 +1,7 @@
 package my.learning.javarush.st3.sokoban.view;
 
 import my.learning.javarush.st3.sokoban.controller.Controller;
+import my.learning.javarush.st3.sokoban.controller.EventListener;
 
 
 import javax.swing.*;
@@ -22,5 +23,8 @@ public class View extends JFrame {
         setLocationRelativeTo(null);
         setTitle("Сокобан");
         setVisible(true);
+    }
+    public void setEventListener(EventListener eventListener){
+        field.setEventListener(eventListener);
     }
 }

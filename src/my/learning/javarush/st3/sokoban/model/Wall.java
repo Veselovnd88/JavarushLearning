@@ -1,0 +1,19 @@
+package my.learning.javarush.st3.sokoban.model;
+
+import java.awt.*;
+
+public class Wall extends CollisionObject{
+
+
+    public Wall(int x, int y) {
+        super(x, y);
+    }
+
+    @Override
+    public void draw(Graphics graphics) {
+        graphics.setColor(Color.black);
+
+        graphics.drawRect(x-width/2,y-height/2,width,getHeight());
+        graphics.fillRect(x-width/2,y-height/2,width,height);
+    }
+}
