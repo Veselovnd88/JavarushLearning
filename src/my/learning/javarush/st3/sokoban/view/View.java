@@ -38,4 +38,10 @@ public class View extends JFrame {
     public void setEventListener(EventListener eventListener){
         field.setEventListener(eventListener);
     }
+    public void completed(int level){
+        this.update();
+        JOptionPane.showMessageDialog(this, "Уровень " + level + " пройден.", "Вы выиграли", JOptionPane.INFORMATION_MESSAGE);
+        controller.startNextLevel();
+
+    }
 }
