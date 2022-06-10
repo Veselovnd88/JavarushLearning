@@ -38,6 +38,14 @@ public class Model {
         currentLevel++;
         restartLevel(currentLevel);
     }
+    public boolean checkWallCollision(CollisionObject collisionObject, Direction direction){
+        for (Wall wall: getGameObjects().walls){
+            if(collisionObject.isCollision(wall,direction){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void move(){
 
