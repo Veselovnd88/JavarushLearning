@@ -39,7 +39,7 @@ public class Model {
         restartLevel(currentLevel);
     }
     public boolean checkWallCollision(CollisionObject collisionObject, Direction direction){
-        for (Wall wall: getGameObjects().walls){
+        for (Wall wall: getGameObjects().getWalls()){// для каждой стены проверяю столкновение
             if(collisionObject.isCollision(wall,direction)){
                 return true;
             }
@@ -47,7 +47,61 @@ public class Model {
         return false;
     }
 
-    public void move(){
+
+    public boolean checkBoxCollisionAndMoveIfAvailable(Direction direction){
+        for (Box box: getGameObjects().getBoxes()){//для каждого ящика
+            if(getGameObjects().getPlayer().isCollision(box,direction)){//если игрок сталкивается с ящиком
+                for(Box bx: getGameObjects().getBoxes()){//для каждого ящика проверяем условие
+                    if(!box.equals(bx)){//если это не ящик из предыдущей итерации
+                        if(box.isCollision(bx,direction)){//если пересеклись то тру
+                            return true;
+                            /*проверяем если игрок сталвикается с ящиком - то проверяем, сталкивается ли ящик еще  с ящиком - если да- то тру
+                            * */
+                        }
+                    }
+                    if(checkWallCollision(box,direction)){//та же самая история со стенами
+                        return true;
+                    }
+                }
+                int dx = direction == Direction.LEFT ? -FIELD_CELL_SIZE : (direction == Direction.RIGHT ? FIELD_CELL_SIZE : 0);
+                //если направление-лево, то дИкс - 20, если право-то 20, если ни то ни другое 0
+                int dy = direction == Direction.UP ? -FIELD_CELL_SIZE : (direction == Direction.DOWN ? FIELD_CELL_SIZE : 0);
+                //то же самое для y
+                box.move(dx, dy);
+            }
+        }
+        return false;
+    }
+    public void checkCompletion(){
+        int numHomes = getGameObjects().getHomes().size();
+        int homesWBoxes = 0;
+
+        for(Home home: getGameObjects().getHomes()){
+            for (Box box :getGameObjects().getBoxes()){
+                if(home.getX()==box.getX()&&home.getY()==box.getY()){
+                    homesWBoxes++;
+                }
+            }
+        }
+        //проверка равенства координат домов и коробок
+        if(numHomes==homesWBoxes){
+            eventListener.levelCompleted(currentLevel);
+        }
+    }
+
+
+    public void move(Direction direction){
+        if(checkWallCollision(getGameObjects().getPlayer(),direction)){
+            return;
+        }
+        if (checkBoxCollisionAndMoveIfAvailable(direction)) {
+            return;
+        }
+        int dx = direction == Direction.LEFT ? -FIELD_CELL_SIZE : (direction == Direction.RIGHT ? FIELD_CELL_SIZE : 0);
+        int dy = direction == Direction.UP ? -FIELD_CELL_SIZE : (direction == Direction.DOWN ? FIELD_CELL_SIZE : 0);
+        gameObjects.getPlayer().move(dx, dy);
+
+        checkCompletion();
 
     }
 

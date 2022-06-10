@@ -33,7 +33,7 @@ public class Controller implements EventListener{
 
     @Override
     public void move(Direction direction) {
-        model.move();//двигает объект и обновляет вью
+        model.move(direction);//двигает объект и обновляет вью
         view.update();
     }
 

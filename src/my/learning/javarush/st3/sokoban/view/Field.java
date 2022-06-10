@@ -47,7 +47,7 @@ public class Field extends JPanel {
                eventListener.move(Direction.UP);
            }
            else if(e.getKeyCode()==KeyEvent.VK_DOWN){
-               eventListener.move(Direction.UP);
+               eventListener.move(Direction.DOWN);
            }
            else if(e.getKeyCode()==KeyEvent.VK_R){
                eventListener.restart();
