@@ -40,7 +40,7 @@ public class Model {
     }
     public boolean checkWallCollision(CollisionObject collisionObject, Direction direction){
         for (Wall wall: getGameObjects().walls){
-            if(collisionObject.isCollision(wall,direction){
+            if(collisionObject.isCollision(wall,direction)){
                 return true;
             }
         }
