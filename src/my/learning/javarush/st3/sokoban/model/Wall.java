@@ -11,7 +11,7 @@ public class Wall extends CollisionObject{
 
     @Override
     public void draw(Graphics graphics) {
-        graphics.setColor(Color.black);
+        graphics.setColor(Color.pink);
 
         graphics.drawRect(x-width/2,y-height/2,width,getHeight());
         graphics.fillRect(x-width/2,y-height/2,width,height);

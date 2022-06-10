@@ -2,6 +2,7 @@ package my.learning.javarush.st3.sokoban.view;
 
 import my.learning.javarush.st3.sokoban.controller.Controller;
 import my.learning.javarush.st3.sokoban.controller.EventListener;
+import my.learning.javarush.st3.sokoban.model.GameObjects;
 
 
 import javax.swing.*;
@@ -24,6 +25,16 @@ public class View extends JFrame {
         setTitle("Сокобан");
         setVisible(true);
     }
+    public void update(){
+        field.repaint();// метод апдейт вызывает репэит у филд - обновление представления - перерисовка поля
+    }
+
+
+    public GameObjects getObjects(){
+       return controller.getGameObjects();//класс представления получает игровые объекты у контроллера
+    }
+
+
     public void setEventListener(EventListener eventListener){
         field.setEventListener(eventListener);
     }
